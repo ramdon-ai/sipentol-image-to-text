@@ -11,10 +11,8 @@ var flash   = require('express-flash');
 
 var regisRouter = require('./routes/regis');
 var loginRouter = require('./routes/login');
-var ocrRouter = require('./routes/ocr');
-var usersRouter = require('./routes/users');
-var dashboardRouter = require('./routes/dashboard');
-var authRouter = require('./routes/auth');
+var adminRouter = require('./routes/admin');
+var surveyorRouter = require('./routes/surveyor');
 
 var app = express();
 
@@ -24,13 +22,14 @@ app.set('/views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(session({ 
-  cookie: { 
-    maxAge: 7200000 
-  },
   resave: false,
   saveUninitialized: false,
   name: 'secret',
-  secret: 'kepo'
+  secret: 'kepo',
+  cookie: {
+    sameSite: true,
+    maxAge: 3600000,
+  },
 }));
 
 app.use(flash())
@@ -43,10 +42,8 @@ app.use("/assets", express.static(path.join(__dirname, "public")));
 
 app.use('/', regisRouter);
 app.use('/login', loginRouter);
-app.use('/scanocr', ocrRouter);
-app.use('/users', usersRouter);
-app.use('/dashboard', dashboardRouter);
-app.use('/logout', authRouter.isLogout);
+app.use('/admin', adminRouter);
+app.use('/surveyor', surveyorRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

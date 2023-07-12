@@ -1,32 +1,31 @@
 var express = require('express');
 var router = express.Router();
 var connection = require('../config/database');
+var bcrypt = require('bcrypt');
 
 router.get('/', function (req, res, next) {
     res.render('register', {
-        tittle: "register",
+        tittle: "Register",
     });
 });
 
 router.post("/save", function (req, res) {
-    // Tampung inputan user kedalam varibel username, email dan password
     let username = req.body.username;
     let email = req.body.email;
     let password = req.body.password;
-    // Pastikan semua varibel terisi
+    let role = req.body.role;
+  
     if (username && email && password) {
-        // Panggil koneksi dan eksekusi query
-        connection.query("INSERT INTO admin (username, email, password) VALUES (?, ?, SHA2(?, 512));", [username, email, password], function (error, results) {
-            if (error) throw error;
-            // Jika tidak ada error
-            // Kembali kehalaman login
-            res.redirect('/login');
-        })
+      bcrypt.hash(password, 10, function (err, hashedPassword) {
+        if (err) throw err;
+        connection.query("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?);", [username, email, hashedPassword, role], function (error, results) {
+          if (error) throw error;
+          res.redirect('/login');
+        });
+      });
     } else {
-        // Kondisi apabila variabel username, email dan password tidak terisi
-        res.redirect('/');
-        res.end();
+      res.redirect('/');
     }
-});
-
+  });
+  
 module.exports = router;

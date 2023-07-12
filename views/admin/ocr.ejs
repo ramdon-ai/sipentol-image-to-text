@@ -35,9 +35,9 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/dashboard">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-book"></i>
+                    <i class="fas fa-globe"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">SIPENTOL</div>
             </a>
@@ -47,7 +47,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="/dashboard">
+                <a class="nav-link" href="/admin">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -126,16 +126,22 @@
 
             <!-- Nav Item - Charts -->
             <li class="nav-item active">
-                <a class="nav-link active" href="/scanocr">
+                <a class="nav-link active" href="/admin/scanocr">
                     <i class="fas fa-fw fa-file"></i>
                     <span>Scan</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="/users">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>User</span></a>
+                <a class="nav-link" href="/admin/datausers">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Users</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/datatanah">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Data Tanah</span></a>
             </li>
 
             <!-- Divider -->
@@ -321,44 +327,188 @@
 
                         </div> -->
                         <!-- <div class="col-lg-6"> -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Extract Image</h6>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Extract Image</h6>
+                            </div>
+                        
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <form action="/admin/upload" method="post" enctype="multipart/form-data">
+                                        <label for="file">Upload Image</label>
+                                        <input type="file" name="file" accept="image/*" required id="">
+                                        <button>Extrac Image</button>
+                                    </form>
+                                    
+                                    <div>
+                                        <textarea name="" id="" cols="100" rows="15">
+                                            <%=dataArray%>
+                                        </textarea>
+                                    </div>
                                 </div>
-                                <div class="card-body text-center">
-                            <form action="/scanocr/upload" method="post" enctype="multipart/form-data">
-                                <label for="file">Upload Image</label>
-                                <input type="file" name="file" accept="image/*" required id="">
-                                <button>Extrac Image</button>
-                            </form>
-                            
-                            <textarea name="" id="" cols="50" rows="25">
-                                <%=dataArray%>
-                            </textarea>
-            
-                            <label for="nop">NOP:</label>
-            <% if (dataArray && dataArray.length > 8) { %>
-              <% const nop = dataArray[8].split('NOP ')[1]; %>
-              <input type="text" id="nop" name="nop" value="<%= nop ? nop : '' %>" readonly>
-            <% } else { %>
-              <input type="text" id="nop" name="nop" value="" readonly>
-            <% } %>
-            </div>
-            
-            <div>
-            <label for="lt">LT:</label>
-            <% if (dataArray && dataArray.length > 8) { %>
-              <% const lt = dataArray[8].split('LT:')[1]; %>
-              <input type="text" id="lt" name="lt" value="<%= lt ? lt : '' %>" readonly>
-            <% } else { %>
-              <input type="text" id="lt" name="lt" value="" readonly>
-            <% } %>
-            
-                             
-            
+
+                                <% if (nop !== '') { %>
+                                <h1 class="h3 mb-1 text-gray-800 text-center">Hasil Scan</h1>
+
+                                <form action="/update-data" method="POST">
+                                    <h2 class="h3 mb-1 text-gray-800">A. Data Basic</h2>
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <div class="row">
+                                                    <div class="col-sm-1">
+                                                        <label for="nop">NOP:</label>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input type="text" class="form-control form-control-user" name="nop" value="<%= nop %>" placeholder="NOP" required readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="row">
+                                                    <div class="col-sm-1">
+                                                        <label for="lt">LT:</label>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input type="text" class="form-control form-control-user" name="lt" value="<%= lt %>" placeholder="LT" required readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="row">
+                                                    <div class="col-sm-2">
+                                                        <label for="lb">LB:</label>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input type="text" class="form-control form-control-user" name="lb" value="<%= lb %>" placeholder="LB" required readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <label for="znt">ZNT:</label>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <input type="text" class="form-control form-control-user" name="znt" value="<%= znt %>" placeholder="ZNT" required readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group"> -->
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label for="alamatObjekPajak">Alamat Objek Pajak:</label>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <input type="text" class="form-control form-control-user" name="alamatObjekPajak" value="<%= alamatObjekPajak %>" required readonly><br>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="form-group"> -->
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label for="namaSubjekPajak">Nama Subjek Pajak:</label>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <input type="text" class="form-control form-control-user" name="namaSubjekPajak" value="<%= namaSubjekPajak %>" required readonly><br>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="form-group"> -->
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label for="alamatWajibPajak">Alamat Wajib Pajak:</label>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <input type="text" class="form-control form-control-user" name="alamatWajibPajak" value="<%= alamatWajibPajak %>" required readonly><br>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+                                    <h2 class="h3 mb-1 text-gray-800">B. Isian Perubahan Data</h2>
+                                        <!-- <div class="form-group"> -->
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label for="jenisTransaksi">Jenis Transaksi:</label>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control form-control-user" name="jenisTransaksi" value="<%= jenisTransaksi %>" required><br>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="form-group"> -->
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label for="status">Status:</label>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control form-control-user" name="status" value="<%= status %>" required><br>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="form-group"> -->
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label for="pekerjaan">Pekerjaan:</label>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control form-control-user" name="pekerjaan" value="<%= pekerjaan %>" required><br>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="form-group"> -->
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label for="keturunan">Keturunan:</label>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control form-control-user" name="keturunan" value="<%= keturunan %>" required><br>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="form-group"> -->
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label for="luasTanah">Luas Tanah:</label>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control form-control-user" name="luasTanah" value="<%= luasTanah %>" required><br>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label for="jenisTanah">Jenis Tanah:</label>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control form-control-user" name="jenisTanah" value="<%= jenisTanah %>" required><br>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="form-group"> -->
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label for="keterangan">Keterangan:</label>
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" class="form-control form-control-user" name="keterangan" value="<%= keterangan %>" required><br>
+                                                </div>
+                                            </div>
+                                        <!-- </div> -->
+
+                                        <!-- <div class="form-group">
+                                            <label for="tindakan">Tindakan:</label>
+                                            <input type="text" class="form-control form-control-user" name="tindakan" value="<%= tindakan %>" required><br>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="pindahBlok">Pindah Ke Blok:</label>
+                                            <input type="text" class="form-control form-control-user" name="pindahBlok" value="<%= pindahBlok %>" required><br>
+                                        </div> -->
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">Save</button>
+                                </form>
+                                <% } %>
+                            </div>
                         </div>
-                        <!-- </div> -->
-                    </div>
 
                 </div>
                 <!-- /.container-fluid -->

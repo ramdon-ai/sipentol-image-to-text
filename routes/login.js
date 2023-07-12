@@ -1,34 +1,45 @@
 var express = require('express');
 var router = express.Router();
 var connection = require('../config/database');
+var bcrypt = require('bcrypt');
 
 router.get('/', function (req, res) {
     res.render('login', {
-        tittle: "login",
+        tittle: "Login",
     });
 });
 
-router.post('/auth', function (req, res) {
-    let email = req.body.email;
-    let password = req.body.password;
-        if (email && password) {
-            connection.query("SELECT * FROM admin WHERE email = ? AND password = SHA2(?, 512)", [email, password], function (error, results) {
-                if (error) throw error;  
-                if (results.length > 0) {
-                    // Jika data ditemukan
-                    req.session.loggedin = true;
-                    req.session.userid = results[0].id_admin;
-                    req.session.username = results[0].username;
-                    res.redirect('/dashboard');
-                } else {
-                    // Jika data tidak ditemukan
-                    res.redirect('/login');
-                }
-            });
+router.post('/login', function (req, res) {
+  let email = req.body.email;
+  let password = req.body.password;
+  let role = req.body.role;
+
+  connection.query("SELECT * FROM users WHERE email = ?", [email], function (error, results) {
+    if (error) throw error;
+    if (results.length > 0) {
+      var user = results[0];
+      bcrypt.compare(password, user.password, function (err, isMatch) {
+        if (err) throw err;
+        if (isMatch) {
+          req.session.loggedin = true;
+          req.session.userid = user.id_user;
+          req.session.username = user.username;
+          req.session.role = user.role;
+
+          if (role === "admin") {
+            res.redirect('/admin');
+          } else {
+            res.redirect('/surveyor');
+          }
         } else {
-            res.redirect('/login');
-            res.end();
+          res.redirect('/login');
         }
+      });
+    } else {
+      res.redirect('/login');
+    }
+  });
 });
+
 
 module.exports = router;
