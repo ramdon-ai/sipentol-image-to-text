@@ -227,33 +227,49 @@ router.get("/", (req, res) => {
 // }
 //   });
 
-  router.post("/update", (req, res) => {
-    let userId = req.body.id_users;
+router.post("/updateusers", (req, res) => {
+  let userId = req.body.id_users;
   let username = req.body.username;
   let email = req.body.email;
   let password = req.body.password;
   let role = req.body.role;
 
-  bcrypt.hash(password, 10, function (err, hashedPassword) {
-    console.log(hashedPassword)
-    if (err) throw err;
+  if (password) {
+    bcrypt.hash(password, 10, function (err, hashedPassword) {
+      if (err) throw err;
 
+      // Update username, email, password, and role in the database
+      let sql =
+        "UPDATE users SET username = ?, email = ?, password = ?, role = ? WHERE id_users = ?";
+
+      connection.query(
+        sql,
+        [username, email, hashedPassword, role, userId],
+        (err) => {
+          if (err) throw err;
+          req.flash('success', "Data berhasil diubah");
+          res.redirect("/admin/datausers");
+        }
+      );
+    });
+  } else {
+    // Update username, email, and role in the database (without changing the password)
     let sql =
-      "UPDATE users SET username = ?, email = ?, password = ?, role = ? WHERE id_users = ?";
+      "UPDATE users SET username = ?, email = ?, role = ? WHERE id_users = ?";
 
     connection.query(
       sql,
-      [username, email, hashedPassword, role, userId],
+      [username, email, role, userId],
       (err) => {
         if (err) throw err;
-        req.flash('success', "Data Berhasil Diubah");
+        req.flash('success', "Data berhasil diubah");
         res.redirect("/admin/datausers");
       }
     );
-  });
-  });
+  }
+});
 
-  router.post("/delete", (req, res) => {
+  router.post("/deleteusers", (req, res) => {
     let sql = "DELETE FROM users WHERE id_users=" + req.body.id_users + "";
     connection.query(sql, (err) => {
       req.flash('error', 'Data Berhasil Dihapus!');
@@ -261,6 +277,88 @@ router.get("/", (req, res) => {
       res.redirect("/admin/datausers");
     });
   });
+
+  router.post("/deletetanah", (req, res) => {
+    let sql = "DELETE FROM tanah WHERE id_tanah=" + req.body.id_tanah + "";
+    connection.query(sql, (err) => {
+      req.flash('error', 'Data Berhasil Dihapus!');
+      if (err) throw err;
+      res.redirect("/admin/datatanah");
+    });
+  });
+
+  router.post("/updatetanah", function (req, res) {
+      let idTanah = req.body.idTanah;
+      let nop = req.body.nop;
+      let lt = req.body.lt;
+      let lb = req.body.lb;
+      let znt = req.body.znt;
+      let alamatObjekPajak = req.body.alamatObjekPajak;
+      let namaSubjekPajak = req.body.namaSubjekPajak;
+      let alamatWajibPajak = req.body.alamatWajibPajak;
+      let jenisTransaksi = req.body.jenisTransaksi;
+      let nopInduk = req.body.nopInduk;
+      let nopBaru = req.body.nopBaru;
+      let namaJalanObjek = req.body.namaJalanObjek;
+      let blokKavNoObjek = req.body.blokKavNoObjek;
+      let kelurahanObjek = req.body.kelurahanObjek;
+      let rtObjek = req.body.rtObjek;
+      let rwObjek = req.body.rwObjek;
+      let status = req.body.status;
+      let pekerjaan = req.body.pekerjaan;
+      let namaJalanWajib = req.body.namaJalanWajib;
+      let blokKavNoWajib = req.body.blokKavNoWajib;
+      let kelurahanWajib = req.body.kelurahanWajib;
+      let rtWajib = req.body.rtWajib;
+      let rwWajib = req.body.rwWajib;
+      let kabupaten = req.body.kabupaten;
+      let noKtp = req.body.noKtp;
+      let zntBaru = req.body.zntBaru;
+      let luasTanahBaru = req.body.luasTanahBaru;
+      let jenisTanah = req.body.jenisTanah;
+      let keterangan = req.body.keterangan;
+
+      let sql = "UPDATE tanah SET nop = ?, lt = ?, lb = ?, znt = ?, alamat_objek_pajak = ?, nama_subjek_pajak = ?, alamat_wajib_pajak = ?, jenis_transaksi = ?, nop_induk = ?, nop_baru = ?, nama_jalan_objek = ?, blok_kav_no_objek = ?, kelurahan_objek = ?, rt_objek = ?, rw_objek = ?, status = ?, pekerjaan = ?, nama_subjek_pajak = ?, nama_jalan_wajib = ?, blok_kav_no_wajib = ?, kelurahan_wajib = ?, rt_wajib = ?, rw_wajib = ?, kabupaten = ?, no_ktp = ?, znt_baru = ?, luas_tanah_baru = ?, jenis_tanah = ?, keterangan = ?, tanggal = ? WHERE id_tanah = ?";
+      connection.query(sql, [
+        nop,
+        lt,
+        lb,
+        znt,
+        alamatObjekPajak,
+        namaSubjekPajak,
+        alamatWajibPajak,
+        jenisTransaksi,
+        nopInduk,
+        nopBaru,
+        namaJalanObjek,
+        blokKavNoObjek,
+        kelurahanObjek,
+        rtObjek,
+        rwObjek,
+        status,
+        pekerjaan,
+        namaJalanWajib,
+        blokKavNoWajib,
+        kelurahanWajib,
+        rtWajib,
+        rwWajib,
+        kabupaten,
+        noKtp,
+        zntBaru,
+        luasTanahBaru,
+        jenisTanah,
+        keterangan,
+        idTanah,
+      ],(err) => {
+        if (err) {
+          console.log(err);
+          req.flash("error", "Terjadi kesalahan saat mengupdate data!");
+        } else {
+          req.flash("success", "Data berhasil diupdate!");
+        }
+        res.redirect("/admin/datatanah");
+      });
+    });
 
   router.get("/logout", (req, res) => {
     try {

@@ -66,7 +66,7 @@ router.get("/", (req, res) => {
     var jenisTransaksi = '';
     var status = '';
     var pekerjaan = '';
-    var keturunan = '';
+    var kelurahan = '';
     var luasTanah = '';
     var jenisTanah = '';
     var keterangan = '';
@@ -99,7 +99,7 @@ router.get("/", (req, res) => {
       } else if (line.includes('Pekerjaan :')) {
         pekerjaan = line.replace('Pekerjaan :', '').trim();
       } else if (line.includes('Keturahan')) {
-        keturunan = line.replace('Keturahan', '').trim();
+        kelurahan = line.replace('Keturahan', '').trim();
       } else if (line.includes('Luas Tanah Baru')) {
         luasTanah = line.replace('Luas Tanah Baru =', '').trim();
       } else if (line.includes('Jenis Tanah :')) {
@@ -123,7 +123,7 @@ router.get("/", (req, res) => {
         jenisTransaksi !== '' &&
         status !== '' &&
         pekerjaan !== '' &&
-        keturunan !== '' &&
+        kelurahan !== '' &&
         luasTanah !== '' &&
         jenisTanah !== '' &&
         keterangan !== '' &&
@@ -148,7 +148,7 @@ router.get("/", (req, res) => {
       jenisTransaksi: jenisTransaksi,
       status: status,
       pekerjaan: pekerjaan,
-      keturunan: keturunan,
+      kelurahan: kelurahan,
       luasTanah: luasTanah,
       jenisTanah: jenisTanah,
       keterangan: keterangan,
@@ -210,17 +210,96 @@ router.get("/", (req, res) => {
       let lt = req.body.lt;
       let lb = req.body.lb;
       let znt = req.body.znt;
-      let aop = req.body.alamatobjekpajak;
-      let nsp = req.body.namasubjekpajak;
-      let awp = req.body.alamatwajibpajak;
+      let alamatObjekPajak = req.body.alamatObjekPajak;
+      let namaSubjekPajak = req.body.namaSubjekPajak;
+      let alamatWajibPajak = req.body.alamatWajibPajak;
+      let jenisTransaksi = req.body.jenisTransaksi;
+      let nopInduk = req.body.nopInduk;
+      let nopBaru = req.body.nopBaru;
+      let namaJalanObjek = req.body.namaJalanObjek;
+      let blokKavNoObjek = req.body.blokKavNoObjek;
+      let kelurahanObjek = req.body.kelurahanObjek;
+      let rtObjek = req.body.rtObjek;
+      let rwObjek = req.body.rwObjek;
+      let status = req.body.status;
+      let pekerjaan = req.body.pekerjaan;
+      let namaJalanWajib = req.body.namaJalanWajib;
+      let blokKavNoWajib = req.body.blokKavNoWajib;
+      let kelurahanWajib = req.body.kelurahanWajib;
+      let rtWajib = req.body.rtWajib;
+      let rwWajib = req.body.rwWajib;
+      let kabupaten = req.body.kabupaten;
+      let noKtp = req.body.noKtp;
+      let zntBaru = req.body.zntBaru;
+      let luasTanahBaru = req.body.luasTanahBaru;
+      let jenisTanah = req.body.jenisTanah;
+      let keterangan = req.body.keterangan;
   
-      if (nop && lt && lb && znt && aop && nsp && awp) {
+      if (
+        nop &&
+        lt &&
+        lb &&
+        znt &&
+        alamatObjekPajak &&
+        namaSubjekPajak &&
+        alamatWajibPajak &&
+        jenisTransaksi &&
+        nopInduk &&
+        nopBaru &&
+        namaJalanObjek &&
+        blokKavNoObjek &&
+        kelurahanObjek &&
+        rtObjek &&
+        rwObjek &&
+        status &&
+        pekerjaan &&
+        namaJalanWajib &&
+        blokKavNoWajib &&
+        kelurahanWajib &&
+        rtWajib &&
+        rwWajib &&
+        kabupaten &&
+        noKtp &&
+        zntBaru &&
+        luasTanahBaru &&
+        jenisTanah &&
+        keterangan
+      ) {
         connection.query(
-          "INSERT INTO tanah (nop, lt, lb, znt, alamatobjekpajak, namasubjekpajak, alamatwajibpajak) VALUES (?, ?, ?, ?, ?, ?, ?);",
-          [nop, lt, lb, znt, aop, nsp, awp],
+          "INSERT INTO tanah (nop, lt, lb, znt, alamat_objek_pajak, nama_subjek_pajak, alamat_wajib_pajak, jenis_transaksi, nop_induk, nop_baru, nama_jalan_objek, blok_kav_no_objek, kelurahan_objek, rt_objek, rw_objek, status, pekerjaan, nama_jalan_wajib, blok_kav_no_wajib, kelurahan_wajib, rt_wajib, rw_wajib, kabupaten, no_ktp, znt_baru, luas_tanah_baru, jenis_tanah, keterangan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          [
+            nop,
+            lt,
+            lb,
+            znt,
+            alamatObjekPajak,
+            namaSubjekPajak,
+            alamatWajibPajak,
+            jenisTransaksi,
+            nopInduk,
+            nopBaru,
+            namaJalanObjek,
+            blokKavNoObjek,
+            kelurahanObjek,
+            rtObjek,
+            rwObjek,
+            status,
+            pekerjaan,
+            namaJalanWajib,
+            blokKavNoWajib,
+            kelurahanWajib,
+            rtWajib,
+            rwWajib,
+            kabupaten,
+            noKtp,
+            zntBaru,
+            luasTanahBaru,
+            jenisTanah,
+            keterangan,
+          ],
           function (error, results) {
             if (error) throw error;
-            res.redirect('/surveyor/datatanah');
+            res.redirect("/surveyor/datatanah");
           }
         );
       } else {
@@ -232,7 +311,15 @@ router.get("/", (req, res) => {
   });
   
   
-    
+  
+  router.post("/deletetanah", (req, res) => {
+    let sql = "DELETE FROM tanah WHERE id_tanah=" + req.body.id_tanah + "";
+    connection.query(sql, (err) => {
+      req.flash('error', 'Data Berhasil Dihapus!');
+      if (err) throw err;
+      res.redirect("/surveyor/datatanah");
+    });
+  });
 
   router.get("/logout", (req, res) => {
     try {

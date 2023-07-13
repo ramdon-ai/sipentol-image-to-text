@@ -170,7 +170,8 @@
                                                     </button>
                                                     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editUsers" data-id="<%= user[i].id_users %>" data-username="<%= user[i].username %>" data-email="<%= user[i].email %>" data-role="<%= user[i].role %>">
                                                         <i class="fa fa-pencil-alt"></i>
-                                                    </button>
+                                                      </button>
+                                                      
                                                 </div>
                                             </td>
                                         </tr>
@@ -276,7 +277,7 @@
             var id_users = $(this).data('id');
             $.ajax({
                 type: 'POST',
-                url: '/admin/delete',
+                url: '/admin/deleteusers',
                 data: { id_users: id_users },
                 success: function () {
                 location.reload();
@@ -288,45 +289,46 @@
         });
 
         $('#editUsers').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget);
-            var id_users = button.data('id');
-            var username = button.data('username');
-            var email = button.data('email');
-            var role = button.data('role');
-            var modal = $(this);
-            modal.find('#id_users').val(id_users);
-            modal.find('#username').val(username);
-            modal.find('#email').val(email);
-            modal.find('#role').val(role);
-        });
+  var button = $(event.relatedTarget);
+  var id_users = button.data('id');
+  var username = button.data('username');
+  var email = button.data('email');
+  var role = button.data('role');
+  var modal = $(this);
+  modal.find('#usersId').val(id_users);
+  modal.find('#username').val(username);
+  modal.find('#email').val(email);
+  modal.find('#role').val(role);
+});
 
-        $('#editUsers form').on('submit', function(event) {
-            event.preventDefault();
-            var form = $(this);
-            var id_users = form.find('#id_users').val();
-            var username = form.find('#username').val();
-            var email = form.find('#email').val();
-            var password = form.find('#password').val();
-            var role = form.find('#role').val();
-        
-            $.ajax({
-                type: 'POST',
-                url: '/admin/update',
-                data: {
-                    id_users: id_users,
-                    username: username,
-                    email: email,
-                    password: password,
-                    role: role
-                },
-                success: function() {
-                    location.reload();
-                },
-                error: function() {
-                    alert('Terjadi kesalahan saat mengupdate data!');
-                }
-            });
-        });
+$('#editUsers form').on('submit', function(event) {
+  event.preventDefault();
+  var form = $(this);
+  var id_users = form.find('#usersId').val(); // Perubahan disini: ganti #id_users menjadi #usersId
+  var username = form.find('#username').val();
+  var email = form.find('#email').val();
+  var password = form.find('#password').val();
+  var role = form.find('#role').val();
+
+  $.ajax({
+    type: 'POST',
+    url: '/admin/updateusers', // Perubahan disini: ganti url menjadi /updateusers
+    data: {
+      id_users: id_users,
+      username: username,
+      email: email,
+      password: password,
+      role: role
+    },
+    success: function() {
+      location.reload();
+    },
+    error: function() {
+      alert('Terjadi kesalahan saat mengupdate data!');
+    }
+  });
+});
+
       </script>
       
 </body>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Custom fonts for this template-->
+    <link href="/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/assets/css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<!-- Modal Edit -->
+<div class="modal fade" id="editTanah" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-lg modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Tanah</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+                                    
+                                      <div class="modal-body">
+                                        <form id="editTanahForm" action="/admin/updatetanah" method="post">
+                                            <h2 class="h3 mb-1 text-gray-800">A. Data Basic</h2>
+                                            <div class="form-group row">
+                                              <div class="col-sm-6">
+                                                <div class="row">
+                                                  <div class="col-sm-4">
+                                                    <label for="nop">NOP:</label>
+                                                  </div>
+                                                  <div class="col-sm">
+                                                    <input type="text" class="form-control form-control-user" id="nop" name="nop">
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col-sm-2">
+                                                <div class="row">
+                                                  <div class="col-sm-0">
+                                                    <label for="lt">LT:</label>
+                                                  </div>
+                                                  <div class="col-sm">
+                                                    <input type="text" class="form-control form-control-user" id="lt" name="lt">
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col-sm-2">
+                                                <div class="row">
+                                                  <div class="col-sm-0">
+                                                    <label for="lb">LB:</label>
+                                                  </div>
+                                                  <div class="col-sm">
+                                                    <input type="text" class="form-control form-control-user" id="lb" name="lb">
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col-sm-2">
+                                                <div class="row">
+                                                  <div class="col-sm-0">
+                                                    <label for="znt">ZNT:</label>
+                                                  </div>
+                                                  <div class="col-sm">
+                                                    <input type="text" class="form-control form-control-user" id="znt" name="znt">
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="alamatObjekPajak">Alamat Objek Pajak:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="alamatObjekPajak" name="alamat_objek_pajak">
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="namaSubjekPajak">Nama Subjek Pajak:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="namaSubjekPajak" name="nama_subjek_pajak">
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="alamatWajibPajak">Alamat Wajib Pajak:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="alamatWajibPajak" name="alamat_wajib_pajak">
+                                              </div>
+                                            </div>
+                                            <h2 class="h3 mb-1 text-gray-800">B. Isian Perubahan Data</h2>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="jenisTransaksi">Jenis Transaksi:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="jenisTransaksi" name="jenis_transaksi"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="nopInduk">NOP INDUK:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="nopInduk" name="nop_induk"><br>
+                                              </div>
+                                              <div class="col-sm-0">
+                                                <label for="nopBaru">NOP BARU:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="nopBaru" name="nop_baru"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="namaJalanObjek">Nama Jalan:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="namaJalanObjek" name="nama_jalan_objek"><br>
+                                              </div>
+                                              <div class="col-sm-0">
+                                                <label for="blokKavNoObjek">Blok/Kav/No:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="blokKavNoObjek" name="blok_kav_no_objek"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="kelurahanObjek">Kelurahan:</label>
+                                              </div>
+                                              <div class="col-sm-7">
+                                                <input type="text" class="form-control form-control-user" id="kelurahanObjek" name="kelurahan_objek"><br>
+                                              </div>
+                                              <div class="col-sm-0">
+                                                <label for="rtObjek">RT:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="rtObjek" name="rt_objek"><br>
+                                              </div>
+                                              <div class="col-sm-0">
+                                                <label for="rwObjek">RW:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="rwObjek" name="rw_objek"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="status">Status:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="status" name="status"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="pekerjaan">Pekerjaan:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="pekerjaan" name="pekerjaan"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="namaSubjekPajak">Nama Subjek Pajak:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="namaSubjekPajak" name="nama_subjek_wajak"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="namaJalanWajib">Nama Jalan:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="namaJalanWajib" name="nama_jalan_wajib"><br>
+                                              </div>
+                                              <div class="col-sm-0">
+                                                <label for="blokKavNoWajib">Blok/Kav/No:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="blokKavNoWajib" name="blok_kav_no_wajib"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="kelurahanWajib">Kelurahan:</label>
+                                              </div>
+                                              <div class="col-sm-7">
+                                                <input type="text" class="form-control form-control-user" id="kelurahanWajib" name="kelurahan_wajib"><br>
+                                              </div>
+                                              <div class="col-sm-0">
+                                                <label for="rtWajib">RT:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="rtWajib" name="rt_wajib"><br>
+                                              </div>
+                                              <div class="col-sm-0">
+                                                <label for="rwWajib">RW:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="rwWajib" name="rw_wajib"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="kabupaten">Kabupaten:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="kabupaten" name="kabupaten"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="noKtp">Nomor KTP:</label>
+                                              </div>
+                                              <div class="col-sm-8">
+                                                <input type="text" class="form-control form-control-user" id="noKtp" name="no_ktp"><br>
+                                              </div>
+                                              <div class="col-sm-0">
+                                                <label for="zntBaru">ZNT:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="zntBaru" name="znt_baru"><br>
+                                              </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col-sm-2">
+                                                <label for="luasTanahBaru">Luas Tanah Baru:</label>
+                                              </div>
+                                              <div class="col-sm">
+                                                <input type="text" class="form-control form-control-user" id="luasTanahBaru" name="luas_tanah_baru"><br>
+                                              </div>
+                                            </div>
+                                            <div class="form-group">
+                                              <div class="row">
+                                                <div class="col-sm-2">
+                                                  <label for="jenisTanah">Jenis Tanah:</label>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <input type="text" class="form-control form-control-user" id="jenisTanah" name="jenis_tanah"><br>
+                                                </div>
+                                              </div>
+                                              <div class="row">
+                                                <div class="col-sm-2">
+                                                  <label for="keterangan">Keterangan:</label>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <input type="text" class="form-control form-control-user" id="keterangan" name="keterangan"><br>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                              <button type="submit" class="btn btn-warning">Edit</button>
+                                            </div>
+                                          </form>
+                                          
+                                      </div>
+                                      
+                                  </div>
+                                </div>
+                              </div>
+                              
+                  
+      </div>
+    </div>
+  </div>
+  
+
+ <!-- Bootstrap core JavaScript-->
+ <script src="/assets/vendor/jquery/jquery.min.js"></script>
+ <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+ <!-- Core plugin JavaScript-->
+ <script src="/assets/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+ <!-- Custom scripts for all pages-->
+ <script src="/assets/js/sb-admin-2.min.js"></script>
+
+</html>

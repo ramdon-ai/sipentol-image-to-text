@@ -22,43 +22,42 @@
 
 <!-- Modal Edit -->
 <div class="modal fade" id="editUsers" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-lg modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editModalLabel">Edit Pengguna</h5>
+          <h5 class="modal-title" id="editModalLabel">Edit Users</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
         <div class="modal-body">
-          <form class="user" action="/admin/update" method="post">
+          <form class="user" id="editForm" action="/admin/updateusers" method="post"> <!-- Perubahan disini: ganti action menjadi /updateusers -->
             <div class="form-group">
-              <label for="editUsername">Username</label>
+              <label for="username">Username</label> <!-- Perubahan disini: ganti for menjadi username -->
               <input type="text" class="form-control form-control-user" id="username" name="username" placeholder="Username">
             </div>
             <div class="form-group">
-              <label for="editEmail">Email Address</label>
+              <label for="email">Email Address</label> <!-- Perubahan disini: ganti for menjadi email -->
               <input type="email" class="form-control form-control-user" id="email" name="email" placeholder="Email Address">
             </div>
             <div class="form-group">
-              <label for="editPassword">Password</label>
+              <label for="password">Password</label> <!-- Perubahan disini: ganti for menjadi password -->
               <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password">
             </div>
             <div class="form-group">
-              <label for="editRole">Role</label>
+              <label for="role">Role</label> <!-- Perubahan disini: ganti for menjadi role -->
               <select class="form-control" id="role" name="role">
                 <option value="admin">Admin</option>
                 <option value="surveyor">Surveyor</option>
               </select>
             </div>
-        </div>
-        <div class="modal-footer">
-                    <input type="submit" name="id_users" class="form-control" id="id_users" />
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-warning">Edit</button>
-        
-        </div>
-    </form>
+            <div class="modal-footer">
+              <input type="hidden" class="form-control" id="usersId" name="id_users"> <!-- Perubahan disini: tambahkan input hidden untuk id_users -->
+              <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-warning">Edit</button>
+            </div>
+          </form>
+          
       </div>
     </div>
   </div>
