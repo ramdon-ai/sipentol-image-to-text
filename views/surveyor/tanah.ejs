@@ -52,11 +52,11 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Nav Item - Charts -->
+            <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="/surveyor/scanocr">
                     <i class="fas fa-fw fa-file"></i>
-                    <span>Scan</span></a>
+                    <span>Input Data</span></a>
             </li>
 
             <li class="nav-item active">
@@ -101,6 +101,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Hi, <%= username %></span>
                             </a>
+
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
@@ -124,9 +125,8 @@
                     <h1 class="h3 mb-2 text-gray-800">Data Tanah</h1>
 
                         <div class="card shadow mb-4">
-                            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <div class="card-header py-3">
                                 <h6 class="m-0 font-weight-bold text-primary">Data Tanah</h6>
-                                <a href="/surveyor/scanocr" class="btn btn-primary btn-md">Tambah</a>
                             </div>
                             <div class="card-body">
                                 <% if (messages.success) { %>
@@ -209,15 +209,15 @@
                                                         <td><%= tanah[i].jenis_tanah_baru %></td>
                                                         <td><%= tanah[i].keterangan %></td>
                                                         <td><%= tanah[i].tanggal %></td>
-
                                                         <td>
                                                             <div class="d-flex">
-                                                                <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#deleteUsers" >
+                                                                <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#deleteTanah" data-id="<%= tanah[i].id_tanah %>">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
-                                                                <button type="button" class="btn btn-warning" data-toggle="modal" >
+                                                                <button type="button" class="btn btn-warning mr-2" data-toggle="modal" data-target="#editTanah" data-id="<%= tanah[i].id_tanah %>" data-nop="<%= tanah[i].nop %>" data-lt="<%= tanah[i].lt %>" data-lb="<%= tanah[i].lb %>" data-znt="<%= tanah[i].znt %>" data-alamatobjekpajak="<%= tanah[i].alamat_objek_pajak %>" data-namasubjekpajak="<%= tanah[i].nama_subjek_pajak %>" data-alamatwajibpajak="<%= tanah[i].alamat_wajib_pajak %>" data-jenistransaksi="<%= tanah[i].jenis_transaksi %>" data-nopinduk="<%= tanah[i].nop_induk %>" data-nopbaru="<%= tanah[i].nop_baru %>" data-namajalanobjek="<%= tanah[i].nama_jalan_objek %>" data-blokkavnoobjek="<%= tanah[i].blok_kav_no_objek %>" data-kelurahanobjek="<%= tanah[i].kelurahan_objek %>" data-rtobjek="<%= tanah[i].rt_objek %>" data-rwobjek="<%= tanah[i].rw_objek %>" data-status="<%= tanah[i].status %>" data-pekerjaan="<%= tanah[i].pekerjaan %>" data-namajalanwajib="<%= tanah[i].nama_jalan_wajib %>" data-blokkavnowajib="<%= tanah[i].blok_kav_no_wajib %>" data-kelurahanwajib="<%= tanah[i].kelurahan_wajib %>" data-rtwajib="<%= tanah[i].rt_wajib %>" data-rwwajib="<%= tanah[i].rw_wajib %>" data-kabupaten="<%= tanah[i].kabupaten %>" data-noktp="<%= tanah[i].no_ktp %>" data-zntbaru="<%= tanah[i].znt_baru %>" data-luastanahbaru="<%= tanah[i].luas_tanah_baru %>" data-jenistanah="<%= tanah[i].jenis_tanah %>" data-keterangan="<%= tanah[i].keterangan %>">
                                                                     <i class="fa fa-pencil-alt"></i>
                                                                 </button>
+                                                               
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -230,7 +230,7 @@
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                <% } %>
+                                                <% } %>    
                                         </tbody>
                                     </table>
                                 </div>
@@ -264,19 +264,20 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
+    <%- include ('./deleteTanah'); %>
+    <%- include ('./editTanah'); %>
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Yakin untuk keluar?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Silahkan klik "Logout" jika ingin keluar.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-primary" href="/surveyor/logout">Logout</a>
@@ -303,6 +304,174 @@
     <script src="/assets/js/demo/chart-pie-demo.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $('#deleteTanah').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id_tanah = button.data('id');
+            var modal = $(this);
+            modal.find('#tanahId').text(id_tanah);
+            modal.find('#deleteButton').attr('data-id', id_tanah);
+        });
+      
+        $('#deleteButton').on('click', function () {
+            var id_tanah = $(this).data('id');
+            $.ajax({
+                type: 'POST',
+                url: '/surveyor/deletetanah',
+                data: { id_tanah: id_tanah },
+                success: function () {
+                location.reload();
+                },
+                error: function () {
+                alert('Terjadi kesalahan saat menghapus data!');
+                }
+            });
+        });
+
+        $('#editTanah').on('show.bs.modal', function(event) {
+  var button = $(event.relatedTarget);
+  var id_tanah = button.data('id');
+  var nop = button.data('nop');
+  var lt = button.data('lt');
+  var lb = button.data('lb');
+  var znt = button.data('znt');
+  var alamatObjekPajak = button.data('alamatobjekpajak');
+  var namaSubjekPajak = button.data('namasubjekpajak');
+  var alamatWajibPajak = button.data('alamatwajibpajak');
+  var jenisTransaksi = button.data('jenistransaksi');
+  var nopInduk = button.data('nopinduk');
+  var nopBaru = button.data('nopbaru');
+  var namaJalanObjek = button.data('namajalanobjek');
+  var blokKavNoObjek = button.data('blokkavnoobjek');
+  var kelurahanObjek = button.data('kelurahanobjek');
+  var rtObjek = button.data('rtobjek');
+  var rwObjek = button.data('rwobjek');
+  var status = button.data('status');
+  var pekerjaan = button.data('pekerjaan');
+  var namaJalanWajib = button.data('namajalanwajib');
+  var blokKavNoWajib = button.data('blokkavnowajib');
+  var kelurahanWajib = button.data('kelurahanwajib');
+  var rtWajib = button.data('rtwajib');
+  var rwWajib = button.data('rwwajib');
+  var kabupaten = button.data('kabupaten');
+  var noKtp = button.data('noktp');
+  var zntBaru = button.data('zntbaru');
+  var luasTanahBaru = button.data('luastanahbaru');
+  var jenisTanah = button.data('jenistanah');
+  var keterangan = button.data('keterangan');
+
+  var modal = $(this);
+  modal.find('#tanahId').val(id_tanah);
+  modal.find('#nop').val(nop);
+  modal.find('#lt').val(lt);
+  modal.find('#lb').val(lb);
+  modal.find('#znt').val(znt);
+  modal.find('#alamatObjekPajak').val(alamatObjekPajak);
+  modal.find('#namaSubjekPajak').val(namaSubjekPajak);
+  modal.find('#alamatWajibPajak').val(alamatWajibPajak);
+  modal.find('#jenisTransaksi').val(jenisTransaksi);
+  modal.find('#nopInduk').val(nopInduk);
+  modal.find('#nopBaru').val(nopBaru);
+  modal.find('#namaJalanObjek').val(namaJalanObjek);
+  modal.find('#blokKavNoObjek').val(blokKavNoObjek);
+  modal.find('#kelurahanObjek').val(kelurahanObjek);
+  modal.find('#rtObjek').val(rtObjek);
+  modal.find('#rwObjek').val(rwObjek);
+  modal.find('#status').val(status);
+  modal.find('#pekerjaan').val(pekerjaan);
+  modal.find('#namaJalanWajib').val(namaJalanWajib);
+  modal.find('#blokKavNoWajib').val(blokKavNoWajib);
+  modal.find('#kelurahanWajib').val(kelurahanWajib);
+  modal.find('#rtWajib').val(rtWajib);
+  modal.find('#rwWajib').val(rwWajib);
+  modal.find('#kabupaten').val(kabupaten);
+  modal.find('#noKtp').val(noKtp);
+  modal.find('#zntBaru').val(zntBaru);
+  modal.find('#luasTanahBaru').val(luasTanahBaru);
+  modal.find('#jenisTanah').val(jenisTanah);
+  modal.find('#keterangan').val(keterangan);
+});
+
+$('#editTanah form').on('submit', function(event) {
+  event.preventDefault();
+  var form = $(this);
+  var id_tanah = form.find('#tanahId').val();
+  var nop = form.find('#nop').val();
+  var lt = form.find('#lt').val();
+  var lb = form.find('#lb').val();
+  var znt = form.find('#znt').val();
+  var alamatObjekPajak = form.find('#alamatObjekPajak').val();
+  var namaSubjekPajak = form.find('#namaSubjekPajak').val();
+  var alamatWajibPajak = form.find('#alamatWajibPajak').val();
+  var jenisTransaksi = form.find('#jenisTransaksi').val();
+  var nopInduk = form.find('#nopInduk').val();
+  var nopBaru = form.find('#nopBaru').val();
+  var namaJalanObjek = form.find('#namaJalanObjek').val();
+  var blokKavNoObjek = form.find('#blokKavNoObjek').val();
+  var kelurahanObjek = form.find('#kelurahanObjek').val();
+  var rtObjek = form.find('#rtObjek').val();
+  var rwObjek = form.find('#rwObjek').val();
+  var status = form.find('#status').val();
+  var pekerjaan = form.find('#pekerjaan').val();
+  var namaJalanWajib = form.find('#namaJalanWajib').val();
+  var blokKavNoWajib = form.find('#blokKavNoWajib').val();
+  var kelurahanWajib = form.find('#kelurahanWajib').val();
+  var rtWajib = form.find('#rtWajib').val();
+  var rwWajib = form.find('#rwWajib').val();
+  var kabupaten = form.find('#kabupaten').val();
+  var noKtp = form.find('#noKtp').val();
+  var zntBaru = form.find('#zntBaru').val();
+  var luasTanahBaru = form.find('#luasTanahBaru').val();
+  var jenisTanah = form.find('#jenisTanah').val();
+  var keterangan = form.find('#keterangan').val();
+
+  $.ajax({
+    type: 'POST',
+    url: '/surveyor/updatetanah',
+    data: {
+      id_tanah: id_tanah,
+      nop: nop,
+      lt: lt,
+      lb: lb,
+      znt: znt,
+      alamatObjekPajak: alamatObjekPajak,
+      namaSubjekPajak: namaSubjekPajak,
+      alamatWajibPajak: alamatWajibPajak,
+      jenisTransaksi: jenisTransaksi,
+      nopInduk: nopInduk,
+      nopBaru: nopBaru,
+      namaJalanObjek: namaJalanObjek,
+      blokKavNoObjek: blokKavNoObjek,
+      kelurahanObjek: kelurahanObjek,
+      rtObjek: rtObjek,
+      rwObjek: rwObjek,
+      status: status,
+      pekerjaan: pekerjaan,
+      namaJalanWajib: namaJalanWajib,
+      blokKavNoWajib: blokKavNoWajib,
+      kelurahanWajib: kelurahanWajib,
+      rtWajib: rtWajib,
+      rwWajib: rwWajib,
+      kabupaten: kabupaten,
+      noKtp: noKtp,
+      zntBaru: zntBaru,
+      luasTanahBaru: luasTanahBaru,
+      jenisTanah: jenisTanah,
+      keterangan: keterangan
+    },
+    success: function() {
+      location.reload();
+    },
+    error: function() {
+      alert('Terjadi kesalahan saat mengupdate data!');
+    }
+  });
+});
+
+
+      </script>
 
 </body>
 

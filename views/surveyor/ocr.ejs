@@ -59,7 +59,7 @@
             <li class="nav-item active">
                 <a class="nav-link active" href="/surveyor/scanocr">
                     <i class="fas fa-fw fa-file"></i>
-                    <span>Scan</span></a>
+                    <span>Input Data</span></a>
             </li>
 
             <li class="nav-item">
@@ -228,12 +228,28 @@
                                             <h2 class="h3 mb-1 text-gray-800">B. Isian Perubahan Data</h2>
                                             <div class="row">
                                                 <div class="col-sm-2">
-                                                    <label for="jenisTransaksi">Jenis Transaksi:</label>
+                                                  <label for="jenisTransaksi">Jenis Transaksi:</label>
+                                                </div>
+                                                    <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="pemutakhiran" name="jenisTransaksi[]" value="pemutakhiran">
+                                                    <label class="form-check-label" for="pemutakhiran">Pemutakhiran</label>
+                                                  </div>
                                                 </div>
                                                 <div class="col-sm">
-                                                    <input type="text" class="form-control form-control-user" name="jenisTransaksi" value="<%= jenisTransaksi %>" ><br>
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="penghapusan" name="jenisTransaksi[]" value="penghapusan">
+                                                    <label class="form-check-label" for="penghapusan">Penghapusan</label>
+                                                  </div>
                                                 </div>
-                                            </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="perekaman" name="jenisTransaksi[]" value="perekaman">
+                                                    <label class="form-check-label" for="perekaman">Perekaman</label>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <br>
                                             <div class="row">
                                                 <div class="col-sm-2">
                                                     <label for="jenisTransaksi">NOP INDUK:</label>
@@ -284,20 +300,77 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-2">
-                                                    <label for="status">Status:</label>
+                                                  <label for="status">Status:</label>
                                                 </div>
                                                 <div class="col-sm">
-                                                    <input type="text" class="form-control form-control-user" name="status" value="<%= status %>" ><br>
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="pemilik" name="status[]" value="pemilik">
+                                                    <label class="form-check-label" for="pemilik">Pemilik</label>
+                                                  </div>
+                                                  </div>
+                                                  <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="penyewa" name="status[]" value="penyewa">
+                                                    <label class="form-check-label" for="penyewa">Penyewa</label>
+                                                  </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="pengelola" name="status[]" value="pengelola">
+                                                    <label class="form-check-label" for="pengelola">Pengelola</label>
+                                                  </div>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="pemakai" name="status[]" value="pemakai">
+                                                    <label class="form-check-label" for="pemakai">Pemakai</label>
+                                                  </div>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="sengketa" name="status[]" value="sengketa">
+                                                    <label class="form-check-label" for="sengketa">Sengketa</label>
+                                                  </div>
+                                                </div>
+                                                </div>
+                                              <br>
+                                              
+                                              <div class="row">
                                                 <div class="col-sm-2">
-                                                    <label for="pekerjaan">Pekerjaan:</label>
+                                                  <label for="pekerjaan">Pekerjaan:</label>
                                                 </div>
                                                 <div class="col-sm">
-                                                    <input type="text" class="form-control form-control-user" name="pekerjaan" value="<%= pekerjaan %>" ><br>
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="pns" name="pekerjaan[]" value="PNS">
+                                                    <label class="form-check-label" for="pns">PNS</label>
+                                                  </div>
+                                                  </div>
+                                                  <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="abri" name="pekerjaan[]" value="ABRI">
+                                                    <label class="form-check-label" for="abri">ABRI</label>
+                                                  </div>
                                                 </div>
-                                            </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="pensiunan" name="pekerjaan[]" value="pensiunan">
+                                                    <label class="form-check-label" for="pensiunan">Pensiunan</label>
+                                                  </div>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="badan" name="pekerjaan[]" value="badan">
+                                                    <label class="form-check-label" for="badan">Badan</label>
+                                                  </div>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="lainnya" name="pekerjaan[]" value="lainnya">
+                                                    <label class="form-check-label" for="lainnya">Lainnya</label>
+                                                  </div>
+                                                </div>
+                                              </div><br>
+                                              
                                             <div class="row">
                                                 <div class="col-sm-2">
                                                     <label for="pekerjaan">Nama Subjek Pajak:</label>
@@ -370,29 +443,110 @@
                                                     <input type="text" class="form-control form-control-user" name="luasTanahBaru" value="<%= luasTanah %>" ><br>
                                                 </div>
                                             </div>
-                                        <div class="form-group">
+                                        <!--  -->
                                             <div class="row">
                                                 <div class="col-sm-2">
-                                                    <label for="jenisTanah">Jenis Tanah:</label>
+                                                  <label for="jenisTanah">Jenis Tanah:</label>
                                                 </div>
                                                 <div class="col-sm">
-                                                    <input type="text" class="form-control form-control-user" name="jenisTanah" value="<%= jenisTanah %>" ><br>
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="tanahBangunan" name="jenisTanah[]" value="tanah+bangunan">
+                                                    <label class="form-check-label" for="tanahBangunan">Tanah + Bangunan</label>
+                                                  </div>
+                                                  </div>
+                                                  <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="kavling" name="jenisTanah[]" value="kavling">
+                                                    <label class="form-check-label" for="kavling">Kavling</label>
+                                                  </div>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="tanahKosong" name="jenisTanah[]" value="tanah kosong">
+                                                    <label class="form-check-label" for="tanahKosong">Tanah Kosong</label>
+                                                  </div>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="fasum" name="jenisTanah[]" value="fasum">
+                                                    <label class="form-check-label" for="fasum">Fasum</label>
+                                                  </div>
+                                                </div>
+                                              </div><br>
+                                              <div class="form-group border">
+                                              <div class="row">
+                                                <div class="col-sm-2">
+                                                  <label for="keterangan">Keterangan:</label>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="dataTetap" name="keterangan[]" value="data tetap">
+                                                    <label class="form-check-label" for="dataTetap">Data Tetap</label>
+                                                  </div>
+                                                  </div>
+                                                  <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="gantiNama" name="keterangan[]" value="ganti nama">
+                                                    <label class="form-check-label" for="gantiNama">Ganti Nama</label>
+                                                  </div>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="pecah" name="keterangan[]" value="pecah">
+                                                    <label class="form-check-label" for="pecah">Pecah</label>
+                                                  </div>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="rubahLT" name="keterangan[]" value="rubah LT">
+                                                    <label class="form-check-label" for="rubahLT">Rubah LT</label>
+                                                  </div>
+                                                </div>
+                                                <div class="col-sm">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="rubahLB" name="keterangan[]" value="rubah LB">
+                                                    <label class="form-check-label" for="rubahLB">Rubah LB</label>
+                                                  </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            
+                                                <div class="row">
+                                                    <div class="col-sm-2"></div>
                                                 <div class="col-sm-2">
-                                                    <label for="keterangan">Keterangan:</label>
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="hapus" name="keterangan[]" value="hapus">
+                                                    <label class="form-check-label" for="hapus">Hapus</label>
+                                                  </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="gabung" name="keterangan[]" value="gabung">
+                                                    <label class="form-check-label" for="gabung">Gabung</label>
+                                                  </div>
                                                 </div>
                                                 <div class="col-sm">
-                                                    <input type="text" class="form-control form-control-user" name="keterangan" value="<%= keterangan %>" ><br>
+                                                  <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="lainnya" name="keterangan[]" value="lainnya">
+                                                    <label class="form-check-label" for="lainnya">Lainnya</label>
+                                                  </div>
                                                 </div>
+                                            </div>
+                                                
+                                              <div class="row">
+                                                <div class="col-sm-2"></div>
+                                                <div class="col-sm">
+                                              <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="pindahBlok" name="keterangan[]" value="pindah blok">
+                                                <label class="form-check-label" for="pindahBlok">Pindah Blok</label>
+                                              </div>
+                                            </div>
+                                            </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-10"></div>
                                                 <div class="col-md-2">
                                                   <button type="submit" class="btn btn-primary btn-user btn-block">Save</button>
                                                 </div>
-                                              </div>
                                               </div>
                                               
                                 </form>

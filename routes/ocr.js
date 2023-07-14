@@ -36,7 +36,7 @@ router.get("/", authRouter.isLogin, (req, res) => {
   var jenisTransaksi = '';
   var status = '';
   var pekerjaan = '';
-  var keturunan = '';
+  var kelurahan = '';
   var luasTanah = '';
   var jenisTanah = '';
   var keterangan = '';
@@ -67,7 +67,7 @@ router.get("/", authRouter.isLogin, (req, res) => {
     } else if (line.includes('Pekerjaan :')) {
       pekerjaan = line.replace('Pekerjaan :', '').trim();
     } else if (line.includes('Keturahan')) {
-      keturunan = line.replace('Keturahan', '').trim();
+      kelurahan = line.replace('Keturahan', '').trim();
     } else if (line.includes('Luas Tanah Baru')) {
       luasTanah = line.replace('Luas Tanah Baru =', '').trim();
     } else if (line.includes('Jenis Tanah :')) {
@@ -91,7 +91,7 @@ router.get("/", authRouter.isLogin, (req, res) => {
       jenisTransaksi !== '' &&
       status !== '' &&
       pekerjaan !== '' &&
-      keturunan !== '' &&
+      kelurahan !== '' &&
       luasTanah !== '' &&
       jenisTanah !== '' &&
       keterangan !== '' &&
@@ -114,7 +114,7 @@ router.get("/", authRouter.isLogin, (req, res) => {
     jenisTransaksi: jenisTransaksi,
     status: status,
     pekerjaan: pekerjaan,
-    keturunan: keturunan,
+    kelurahan: kelurahan,
     luasTanah: luasTanah,
     jenisTanah: jenisTanah,
     keterangan: keterangan,

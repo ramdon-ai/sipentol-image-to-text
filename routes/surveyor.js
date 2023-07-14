@@ -42,12 +42,36 @@ router.get("/", (req, res) => {
         if (err) {
           return console.log("error: " + err.message);
         }
-        res.render("surveyor/dashboard", {
-        tittle: "Dashboard",
-        tanah: dataTanah,
-        username: req.session.username
-        });
-      });
+        connection.query(
+          "SELECT tanggal, COUNT(*) AS jumlah_data FROM tanah WHERE tanggal = CURDATE() GROUP BY tanggal",
+          (err, dataHari) => {
+            if (err) {
+              return console.log("error: " + err.message);
+            }
+            connection.query(
+              "SELECT EXTRACT(YEAR_MONTH FROM tanggal) AS tahun_bulan, COUNT(*) AS jumlah_data FROM tanah WHERE YEAR(tanggal) = YEAR(CURDATE()) AND MONTH(tanggal) = MONTH(CURDATE()) GROUP BY tahun_bulan",
+              (err, dataBulan) => {
+                if (err) {
+                  return console.log("error: " + err.message);
+                }
+                connection.query(
+                  "SELECT EXTRACT(YEAR FROM tanggal) AS tahun, COUNT(*) AS jumlah_data FROM tanah WHERE YEAR(tanggal) = YEAR(CURDATE()) GROUP BY tahun",
+                  (err, dataTahun) => {
+                    if (err) {
+                      return console.log("error: " + err.message);
+                    }
+    res.render("surveyor/dashboard", {
+      tittle: "Dashboard",
+      tanah: dataTanah,
+      username: req.session.username,
+      hari: dataHari,
+      bulan: dataBulan,
+      tahun: dataTahun
+    });
+  });
+});
+});
+});
     } else {
         res.redirect("/login");
     }
@@ -193,7 +217,7 @@ router.get("/", (req, res) => {
         if (err) {
           return console.log("error: " + err.message);
         }
-    res.render("admin/tanah", {
+    res.render("surveyor/tanah", {
       tittle: "Data Tanah",
               tanah: dataTanah,
       username: req.session.username
@@ -206,111 +230,160 @@ router.get("/", (req, res) => {
 
   router.post("/save", function (req, res) {
     if (req.session.loggedin) {
-      let nop = req.body.nop;
-      let lt = req.body.lt;
-      let lb = req.body.lb;
-      let znt = req.body.znt;
-      let alamatObjekPajak = req.body.alamatObjekPajak;
-      let namaSubjekPajak = req.body.namaSubjekPajak;
-      let alamatWajibPajak = req.body.alamatWajibPajak;
-      let jenisTransaksi = req.body.jenisTransaksi;
-      let nopInduk = req.body.nopInduk;
-      let nopBaru = req.body.nopBaru;
-      let namaJalanObjek = req.body.namaJalanObjek;
-      let blokKavNoObjek = req.body.blokKavNoObjek;
-      let kelurahanObjek = req.body.kelurahanObjek;
-      let rtObjek = req.body.rtObjek;
-      let rwObjek = req.body.rwObjek;
-      let status = req.body.status;
-      let pekerjaan = req.body.pekerjaan;
-      let namaJalanWajib = req.body.namaJalanWajib;
-      let blokKavNoWajib = req.body.blokKavNoWajib;
-      let kelurahanWajib = req.body.kelurahanWajib;
-      let rtWajib = req.body.rtWajib;
-      let rwWajib = req.body.rwWajib;
-      let kabupaten = req.body.kabupaten;
-      let noKtp = req.body.noKtp;
-      let zntBaru = req.body.zntBaru;
-      let luasTanahBaru = req.body.luasTanahBaru;
-      let jenisTanah = req.body.jenisTanah;
-      let keterangan = req.body.keterangan;
+      let nop = req.body.nop || '-';
+      let lt = req.body.lt || '-';
+      let lb = req.body.lb || '-';
+      let znt = req.body.znt || '-';
+      let alamatObjekPajak = req.body.alamatObjekPajak || '-';
+      let namaSubjekPajak = req.body.namaSubjekPajak || '-';
+      let alamatWajibPajak = req.body.alamatWajibPajak || '-';
+      let jenisTransaksi = Array.isArray(req.body.jenisTransaksi) ? req.body.jenisTransaksi : [req.body.jenisTransaksi] || '-';
+      let nopInduk = req.body.nopInduk || '-';
+      let nopBaru = req.body.nopBaru || '-';
+      let namaJalanObjek = req.body.namaJalanObjek || '-';
+      let blokKavNoObjek = req.body.blokKavNoObjek || '-';
+      let kelurahanObjek = req.body.kelurahanObjek || '-';
+      let rtObjek = req.body.rtObjek || '-';
+      let rwObjek = req.body.rwObjek || '-';
+      let status = Array.isArray(req.body.status) ? req.body.status : [req.body.status] || '-';
+      let pekerjaan = Array.isArray(req.body.pekerjaan) ? req.body.pekerjaan : [req.body.pekerjaan] || '-';
+      let namaJalanWajib = req.body.namaJalanWajib || '-';
+      let blokKavNoWajib = req.body.blokKavNoWajib || '-';
+      let kelurahanWajib = req.body.kelurahanWajib || '-';
+      let rtWajib = req.body.rtWajib || '-';
+      let rwWajib = req.body.rwWajib || '-';
+      let kabupaten = req.body.kabupaten || '-';
+      let noKtp = req.body.noKtp || '-';
+      let zntBaru = req.body.zntBaru || '-';
+      let luasTanahBaru = req.body.luasTanahBaru || '-';
+      let jenisTanah = Array.isArray(req.body.jenisTanah) ? req.body.jenisTanah : [req.body.jenisTanah] || '-';
+      let keterangan = Array.isArray(req.body.keterangan) ? req.body.keterangan : [req.body.keterangan] || '-';
   
-      if (
-        nop &&
-        lt &&
-        lb &&
-        znt &&
-        alamatObjekPajak &&
-        namaSubjekPajak &&
-        alamatWajibPajak &&
-        jenisTransaksi &&
-        nopInduk &&
-        nopBaru &&
-        namaJalanObjek &&
-        blokKavNoObjek &&
-        kelurahanObjek &&
-        rtObjek &&
-        rwObjek &&
-        status &&
-        pekerjaan &&
-        namaJalanWajib &&
-        blokKavNoWajib &&
-        kelurahanWajib &&
-        rtWajib &&
-        rwWajib &&
-        kabupaten &&
-        noKtp &&
-        zntBaru &&
-        luasTanahBaru &&
-        jenisTanah &&
-        keterangan
-      ) {
-        connection.query(
-          "INSERT INTO tanah (nop, lt, lb, znt, alamat_objek_pajak, nama_subjek_pajak, alamat_wajib_pajak, jenis_transaksi, nop_induk, nop_baru, nama_jalan_objek, blok_kav_no_objek, kelurahan_objek, rt_objek, rw_objek, status, pekerjaan, nama_jalan_wajib, blok_kav_no_wajib, kelurahan_wajib, rt_wajib, rw_wajib, kabupaten, no_ktp, znt_baru, luas_tanah_baru, jenis_tanah, keterangan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-          [
-            nop,
-            lt,
-            lb,
-            znt,
-            alamatObjekPajak,
-            namaSubjekPajak,
-            alamatWajibPajak,
-            jenisTransaksi,
-            nopInduk,
-            nopBaru,
-            namaJalanObjek,
-            blokKavNoObjek,
-            kelurahanObjek,
-            rtObjek,
-            rwObjek,
-            status,
-            pekerjaan,
-            namaJalanWajib,
-            blokKavNoWajib,
-            kelurahanWajib,
-            rtWajib,
-            rwWajib,
-            kabupaten,
-            noKtp,
-            zntBaru,
-            luasTanahBaru,
-            jenisTanah,
-            keterangan,
-          ],
-          function (error, results) {
-            if (error) throw error;
-            res.redirect("/surveyor/datatanah");
-          }
-        );
-      } else {
-        res.status(400).send("Data tidak lengkap");
-      }
+      connection.query(
+        "INSERT INTO tanah (nop, lt, lb, znt, alamat_objek_pajak, nama_subjek_pajak, alamat_wajib_pajak, jenis_transaksi, nop_induk, nop_baru, nama_jalan_objek, blok_kav_no_objek, kelurahan_objek, rt_objek, rw_objek, status, pekerjaan, nama_jalan_wajib, blok_kav_no_wajib, kelurahan_wajib, rt_wajib, rw_wajib, kabupaten, no_ktp, znt_baru, luas_tanah_baru, jenis_tanah, keterangan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        [
+          nop,
+          lt,
+          lb,
+          znt,
+          alamatObjekPajak,
+          namaSubjekPajak,
+          alamatWajibPajak,
+          JSON.stringify(jenisTransaksi),
+          nopInduk,
+          nopBaru,
+          namaJalanObjek,
+          blokKavNoObjek,
+          kelurahanObjek,
+          rtObjek,
+          rwObjek,
+          JSON.stringify(status), // Mengubah array status menjadi string sebelum disimpan ke database
+          JSON.stringify(pekerjaan),
+          namaJalanWajib,
+          blokKavNoWajib,
+          kelurahanWajib,
+          rtWajib,
+          rwWajib,
+          kabupaten,
+          noKtp,
+          zntBaru,
+          luasTanahBaru,
+          JSON.stringify(jenisTanah), // Mengubah array jenisTanah menjadi string sebelum disimpan ke database
+          JSON.stringify(keterangan),
+        ],
+        function (error, results) {
+          if (error) throw error;
+          res.redirect("/surveyor/datatanah");
+        }
+      );
     } else {
       res.redirect("/login");
     }
   });
   
   
+  
+  router.post("/updatetanah", function (req, res) {
+    let tanahId = req.body.id_tanah;
+    let nop = req.body.nop;
+    let lt = req.body.lt;
+    let lb = req.body.lb;
+    let znt = req.body.znt;
+    let alamatObjekPajak = req.body.alamatObjekPajak;
+    let namaSubjekPajak = req.body.namaSubjekPajak;
+    let alamatWajibPajak = req.body.alamatWajibPajak;
+    let jenisTransaksi = req.body.jenisTransaksi;
+    let nopInduk = req.body.nopInduk;
+    let nopBaru = req.body.nopBaru;
+    let namaJalanObjek = req.body.namaJalanObjek;
+    let blokKavNoObjek = req.body.blokKavNoObjek;
+    let kelurahanObjek = req.body.kelurahanObjek;
+    let rtObjek = req.body.rtObjek;
+    let rwObjek = req.body.rwObjek;
+    let status = req.body.status;
+    let pekerjaan = req.body.pekerjaan;
+    let namaJalanWajib = req.body.namaJalanWajib;
+    let blokKavNoWajib = req.body.blokKavNoWajib;
+    let kelurahanWajib = req.body.kelurahanWajib;
+    let rtWajib = req.body.rtWajib;
+    let rwWajib = req.body.rwWajib;
+    let kabupaten = req.body.kabupaten;
+    let noKtp = req.body.noKtp;
+    let zntBaru = req.body.zntBaru;
+    let luasTanahBaru = req.body.luasTanahBaru;
+    let jenisTanah = req.body.jenisTanah;
+    let keterangan = req.body.keterangan;
+
+    let sql = "UPDATE tanah SET nop = ?, lt = ?, lb = ?, znt = ?, alamat_objek_pajak = ?, nama_subjek_pajak = ?, alamat_wajib_pajak = ?, jenis_transaksi = ?, nop_induk = ?, nop_baru = ?, nama_jalan_objek = ?, blok_kav_no_objek = ?, kelurahan_objek = ?, rt_objek = ?, rw_objek = ?, status = ?, pekerjaan = ?, nama_jalan_wajib = ?, blok_kav_no_wajib = ?, kelurahan_wajib = ?, rt_wajib = ?, rw_wajib = ?, kabupaten = ?, no_ktp = ?, znt_baru = ?, luas_tanah_baru = ?, jenis_tanah = ?, keterangan = ? WHERE id_tanah = ?";
+    connection.query(sql, [
+      nop,
+      lt,
+      lb,
+      znt,
+      alamatObjekPajak,
+      namaSubjekPajak,
+      alamatWajibPajak,
+      jenisTransaksi,
+      nopInduk,
+      nopBaru,
+      namaJalanObjek,
+      blokKavNoObjek,
+      kelurahanObjek,
+      rtObjek,
+      rwObjek,
+      status,
+      pekerjaan,
+      namaJalanWajib,
+      blokKavNoWajib,
+      kelurahanWajib,
+      rtWajib,
+      rwWajib,
+      kabupaten,
+      noKtp,
+      zntBaru,
+      luasTanahBaru,
+      jenisTanah,
+      keterangan,
+      tanahId,
+    ],(err) => {
+      if (err) {
+        console.log(err);
+        req.flash("error", "Terjadi kesalahan saat mengupdate data!");
+      } else {
+        req.flash("success", "Data berhasil diupdate!");
+      }
+      res.redirect("/surveyor/datatanah");
+    });
+  });
+
+  router.post("/deletetanah", (req, res) => {
+    let sql = "DELETE FROM tanah WHERE id_tanah=" + req.body.id_tanah + "";
+    connection.query(sql, (err) => {
+      req.flash('error', 'Data Berhasil Dihapus!');
+      if (err) throw err;
+      res.redirect("/surveyor/datatanah");
+    });
+  });
   
   router.post("/deletetanah", (req, res) => {
     let sql = "DELETE FROM tanah WHERE id_tanah=" + req.body.id_tanah + "";

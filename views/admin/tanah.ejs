@@ -179,6 +179,8 @@
                                                 for(var i = 0; i< tanah.length; i++) {%>
                                                     <tr>
                                                         <td><%= (i+1) %></td>
+                                                        <td><img style="height: 200%; width: 100%;"
+                                                            src="/assets/uploads/WhatsApp Image 2023-07-12 at 15.46.11.jpeg"></td>
                                                         <td><%= tanah[i].nop %></td>
                                                         <td><%= tanah[i].lt %></td>
                                                         <td><%= tanah[i].lb %></td>
@@ -214,9 +216,12 @@
                                                                 <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#deleteTanah" data-id="<%= tanah[i].id_tanah %>">
                                                                     <i class="fa fa-trash"></i>
                                                                 </button>
-                                                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editTanah" data-id="<%= tanah[i].idTanah %>" data-nop="<%= tanah[i].nop %>" data-lt="<%= tanah[i].lt %>" data-lb="<%= tanah[i].lb %>" data-znt="<%= tanah[i].znt %>" data-alamatobjekpajak="<%= tanah[i].alamat_objek_pajak %>" data-namasubjekpajak="<%= tanah[i].nama_subjek_pajak %>" data-alamatwajibpajak="<%= tanah[i].alamat_wajib_pajak %>" data-jenistransaksi="<%= tanah[i].jenis_transaksi %>" data-nopinduk="<%= tanah[i].nop_induk %>" data-nopbaru="<%= tanah[i].nop_baru %>" data-namajalanobjek="<%= tanah[i].nama_jalan_objek %>" data-blokkavnoobjek="<%= tanah[i].blok_kav_no_objek %>" data-kelurahanobjek="<%= tanah[i].kelurahan_objek %>" data-rtobjek="<%= tanah[i].rt_objek %>" data-rwobjek="<%= tanah[i].rw_objek %>" data-status="<%= tanah[i].status %>" data-pekerjaan="<%= tanah[i].pekerjaan %>" data-namajalanwajib="<%= tanah[i].nama_jalan_wajib %>" data-blokkavnowajib="<%= tanah[i].blok_kav_no_wajib %>" data-kelurahanwajib="<%= tanah[i].kelurahan_wajib %>" data-rtwajib="<%= tanah[i].rt_wajib %>" data-rwwajib="<%= tanah[i].rw_wajib %>" data-kabupaten="<%= tanah[i].kabupaten %>" data-noktp="<%= tanah[i].no_ktp %>" data-zntbaru="<%= tanah[i].znt_baru %>" data-luastanahbaru="<%= tanah[i].luas_tanah_baru %>" data-jenistanah="<%= tanah[i].jenis_tanah %>" data-keterangan="<%= tanah[i].keterangan %>">
+                                                                <button type="button" class="btn btn-warning mr-2" data-toggle="modal" data-target="#editTanah" data-id="<%= tanah[i].id_tanah %>" data-nop="<%= tanah[i].nop %>" data-lt="<%= tanah[i].lt %>" data-lb="<%= tanah[i].lb %>" data-znt="<%= tanah[i].znt %>" data-alamatobjekpajak="<%= tanah[i].alamat_objek_pajak %>" data-namasubjekpajak="<%= tanah[i].nama_subjek_pajak %>" data-alamatwajibpajak="<%= tanah[i].alamat_wajib_pajak %>" data-jenistransaksi="<%= tanah[i].jenis_transaksi %>" data-nopinduk="<%= tanah[i].nop_induk %>" data-nopbaru="<%= tanah[i].nop_baru %>" data-namajalanobjek="<%= tanah[i].nama_jalan_objek %>" data-blokkavnoobjek="<%= tanah[i].blok_kav_no_objek %>" data-kelurahanobjek="<%= tanah[i].kelurahan_objek %>" data-rtobjek="<%= tanah[i].rt_objek %>" data-rwobjek="<%= tanah[i].rw_objek %>" data-status="<%= tanah[i].status %>" data-pekerjaan="<%= tanah[i].pekerjaan %>" data-namajalanwajib="<%= tanah[i].nama_jalan_wajib %>" data-blokkavnowajib="<%= tanah[i].blok_kav_no_wajib %>" data-kelurahanwajib="<%= tanah[i].kelurahan_wajib %>" data-rtwajib="<%= tanah[i].rt_wajib %>" data-rwwajib="<%= tanah[i].rw_wajib %>" data-kabupaten="<%= tanah[i].kabupaten %>" data-noktp="<%= tanah[i].no_ktp %>" data-zntbaru="<%= tanah[i].znt_baru %>" data-luastanahbaru="<%= tanah[i].luas_tanah_baru %>" data-jenistanah="<%= tanah[i].jenis_tanah %>" data-keterangan="<%= tanah[i].keterangan %>">
                                                                     <i class="fa fa-pencil-alt"></i>
                                                                 </button>
+                                                                <!-- <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#tampilGambar" >
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button> -->
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -265,6 +270,7 @@
     </a>
     <%- include ('./deleteTanah'); %>
     <%- include ('./editTanah'); %>
+    <%- include ('./tampilGambar'); %>
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -331,7 +337,7 @@
 
         $('#editTanah').on('show.bs.modal', function(event) {
   var button = $(event.relatedTarget);
-  var idTanah = button.data('id');
+  var id_tanah = button.data('id');
   var nop = button.data('nop');
   var lt = button.data('lt');
   var lb = button.data('lb');
@@ -362,7 +368,7 @@
   var keterangan = button.data('keterangan');
 
   var modal = $(this);
-  modal.find('#idTanah').val(idTanah);
+  modal.find('#tanahId').val(id_tanah);
   modal.find('#nop').val(nop);
   modal.find('#lt').val(lt);
   modal.find('#lb').val(lb);
@@ -393,10 +399,10 @@
   modal.find('#keterangan').val(keterangan);
 });
 
-$('#editTanahForm').on('submit', function(event) {
+$('#editTanah form').on('submit', function(event) {
   event.preventDefault();
   var form = $(this);
-  var idTanah = form.find('#idTanah').val();
+  var id_tanah = form.find('#tanahId').val();
   var nop = form.find('#nop').val();
   var lt = form.find('#lt').val();
   var lb = form.find('#lb').val();
@@ -430,7 +436,7 @@ $('#editTanahForm').on('submit', function(event) {
     type: 'POST',
     url: '/admin/updatetanah',
     data: {
-      idTanah: idTanah,
+      id_tanah: id_tanah,
       nop: nop,
       lt: lt,
       lb: lb,
@@ -468,6 +474,7 @@ $('#editTanahForm').on('submit', function(event) {
     }
   });
 });
+
 
       </script>
 

@@ -31,12 +31,42 @@ router.get("/", (req, res) => {
         if (err) {
           return console.log("error: " + err.message);
         }
+        connection.query(
+          "SELECT tanggal, COUNT(*) AS jumlah_data FROM tanah WHERE tanggal = CURDATE() GROUP BY tanggal",
+          (err, dataHari) => {
+            if (err) {
+              return console.log("error: " + err.message);
+            }
+            connection.query(
+              "SELECT EXTRACT(YEAR_MONTH FROM tanggal) AS tahun_bulan, COUNT(*) AS jumlah_data FROM tanah WHERE YEAR(tanggal) = YEAR(CURDATE()) AND MONTH(tanggal) = MONTH(CURDATE()) GROUP BY tahun_bulan",
+              (err, dataBulan) => {
+                if (err) {
+                  return console.log("error: " + err.message);
+                }
+                connection.query(
+                  "SELECT EXTRACT(YEAR FROM tanggal) AS tahun, COUNT(*) AS jumlah_data FROM tanah WHERE YEAR(tanggal) = YEAR(CURDATE()) GROUP BY tahun",
+                  (err, dataTahun) => {
+                    if (err) {
+                      return console.log("error: " + err.message);
+                    }
+                    connection.query('SELECT lb, luas_tanah_baru FROM tanah ORDER BY id_tanah DESC', function (err, dataPerubahan) {
+                      if (err) {
+                        return console.log("error: " + err.message);
+                      }
     res.render("admin/dashboard", {
       tittle: "Dashboard",
       tanah: dataTanah,
-      username: req.session.username
+      username: req.session.username,
+      hari: dataHari,
+      bulan: dataBulan,
+      tahun: dataTahun,
+      perubahan: dataPerubahan
     });
   });
+});
+});
+});
+      });
 } else {
     res.redirect("/login");
 }
@@ -318,7 +348,7 @@ router.post("/updateusers", (req, res) => {
       let jenisTanah = req.body.jenisTanah;
       let keterangan = req.body.keterangan;
 
-      let sql = "UPDATE tanah SET nop = ?, lt = ?, lb = ?, znt = ?, alamat_objek_pajak = ?, nama_subjek_pajak = ?, alamat_wajib_pajak = ?, jenis_transaksi = ?, nop_induk = ?, nop_baru = ?, nama_jalan_objek = ?, blok_kav_no_objek = ?, kelurahan_objek = ?, rt_objek = ?, rw_objek = ?, status = ?, pekerjaan = ?, nama_subjek_pajak = ?, nama_jalan_wajib = ?, blok_kav_no_wajib = ?, kelurahan_wajib = ?, rt_wajib = ?, rw_wajib = ?, kabupaten = ?, no_ktp = ?, znt_baru = ?, luas_tanah_baru = ?, jenis_tanah = ?, keterangan = ?, tanggal = ? WHERE id_tanah = ?";
+      let sql = "UPDATE tanah SET nop = ?, lt = ?, lb = ?, znt = ?, alamat_objek_pajak = ?, nama_subjek_pajak = ?, alamat_wajib_pajak = ?, jenis_transaksi = ?, nop_induk = ?, nop_baru = ?, nama_jalan_objek = ?, blok_kav_no_objek = ?, kelurahan_objek = ?, rt_objek = ?, rw_objek = ?, status = ?, pekerjaan = ?, nama_jalan_wajib = ?, blok_kav_no_wajib = ?, kelurahan_wajib = ?, rt_wajib = ?, rw_wajib = ?, kabupaten = ?, no_ktp = ?, znt_baru = ?, luas_tanah_baru = ?, jenis_tanah = ?, keterangan = ?, tanggal = ? WHERE id_tanah = ?";
       connection.query(sql, [
         nop,
         lt,
