@@ -2,6 +2,21 @@ var express = require('express');
 var router = express.Router();
 var connection = require('../config/database');
 var bcrypt = require('bcrypt');
+var session = require('express-session');
+var flash   = require('express-flash');
+
+router.use(session({ 
+  resave: true,
+  saveUninitialized: true,
+  name: 'rama',
+  secret: 'rahasia',
+  cookie: {
+    sameSite: false,
+    maxAge: 3600000,
+  },
+}));
+
+router.use(flash());
 
 router.get('/', function (req, res) {
     res.render('login', {
@@ -9,7 +24,7 @@ router.get('/', function (req, res) {
     });
 });
 
-router.post('/login', function (req, res) {
+router.post('/auth', function (req, res) {
   let email = req.body.email;
   let password = req.body.password;
   let role = req.body.role;

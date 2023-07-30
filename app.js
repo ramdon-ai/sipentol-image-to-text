@@ -1,10 +1,9 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 var createError = require('http-errors');
 var path = require("path");
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mysql = require("mysql");
-var bcrypt = require("bcryptjs");
 var session = require('express-session');
 var flash   = require('express-flash');
 
@@ -21,23 +20,24 @@ app.set('/views', path.join(__dirname, 'views'));
 
 app.set('view engine', 'ejs');
 
+app.use(cookieParser());
 app.use(session({ 
-  resave: false,
-  saveUninitialized: false,
-  name: 'secret',
-  secret: 'kepo',
+  resave: true,
+  saveUninitialized: true,
+  name: 'roy',
+  secret: 'rahasia',
   cookie: {
-    sameSite: true,
+    sameSite: false,
     maxAge: 3600000,
   },
 }));
 
-app.use(flash())
+app.use(flash());
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use("/assets", express.static(path.join(__dirname, "public")));
 
 app.use('/', regisRouter);

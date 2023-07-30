@@ -141,6 +141,7 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Gambar</th>
                                                 <th>NOP</th>
                                                 <th>LB</th>
                                                 <th>LT</th>
@@ -179,8 +180,7 @@
                                                 for(var i = 0; i< tanah.length; i++) {%>
                                                     <tr>
                                                         <td><%= (i+1) %></td>
-                                                        <td><img style="height: 200%; width: 100%;"
-                                                            src="/assets/uploads/WhatsApp Image 2023-07-12 at 15.46.11.jpeg"></td>
+                                                        <td><img src="/assets/uploads/<%= tanah[i].gambar %>" alt="Gambar Tanah" style="max-width: 100px; max-height: 100px;"></td>
                                                         <td><%= tanah[i].nop %></td>
                                                         <td><%= tanah[i].lt %></td>
                                                         <td><%= tanah[i].lb %></td>
@@ -208,7 +208,7 @@
                                                         <td><%= tanah[i].no_ktp %></td>
                                                         <td><%= tanah[i].znt_baru %></td>
                                                         <td><%= tanah[i].luas_tanah_baru %></td>
-                                                        <td><%= tanah[i].jenis_tanah_baru %></td>
+                                                        <td><%= tanah[i].jenis_tanah %></td>
                                                         <td><%= tanah[i].keterangan %></td>
                                                         <td><%= tanah[i].tanggal %></td>
                                                         <td>
@@ -228,7 +228,7 @@
                                                     <% }
                                                 }else{ %>
                                                     <tr>
-                                                        <td colspan="4">
+                                                        <td colspan="32">
                                                             <div class="alert alert-danger" role="alert">
                                                                 Data Tidak Ditemukan !
                                                             </div>
@@ -240,8 +240,7 @@
                                 </div>
                             </div>
                         </div>
-                    <!-- </div> -->
-
+                   
                 </div>
                 <!-- /.container-fluid -->
 
@@ -270,7 +269,6 @@
     </a>
     <%- include ('./deleteTanah'); %>
     <%- include ('./editTanah'); %>
-    <%- include ('./tampilGambar'); %>
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -308,8 +306,8 @@
     <script src="/assets/js/demo/chart-area-demo.js"></script>
     <script src="/assets/js/demo/chart-pie-demo.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
 
     <script>
         $('#deleteTanah').on('show.bs.modal', function (event) {

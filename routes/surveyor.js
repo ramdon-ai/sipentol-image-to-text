@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var session = require('express-session');
+// var session = require('express-session');
 var connection = require('../config/database');
 
 var multer = require('multer');
@@ -13,7 +13,7 @@ var worker = createWorker({
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../uploads"));
+    cb(null, path.join(__dirname, "../public/uploads"));
   },
   filename: function (req, file, cb) {
     cb(
@@ -25,116 +25,119 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-router.use(session({ 
-  resave: false,
-  saveUninitialized: false,
-  name: 'secret',
-  secret: 'kepo',
-  cookie: {
-    sameSite: true,
-    maxAge: 3600000,
-  },
-}));
 
 router.get("/", (req, res) => {
-    if (req.session.loggedin && req.session.role === "surveyor") {
-      connection.query('SELECT * FROM tanah ORDER BY id_tanah desc', function (err, dataTanah) {
-        if (err) {
-          return console.log("error: " + err.message);
-        }
-        connection.query(
-          "SELECT tanggal, COUNT(*) AS jumlah_data FROM tanah WHERE tanggal = CURDATE() GROUP BY tanggal",
-          (err, dataHari) => {
-            if (err) {
-              return console.log("error: " + err.message);
-            }
-            connection.query(
-              "SELECT EXTRACT(YEAR_MONTH FROM tanggal) AS tahun_bulan, COUNT(*) AS jumlah_data FROM tanah WHERE YEAR(tanggal) = YEAR(CURDATE()) AND MONTH(tanggal) = MONTH(CURDATE()) GROUP BY tahun_bulan",
-              (err, dataBulan) => {
-                if (err) {
-                  return console.log("error: " + err.message);
-                }
-                connection.query(
-                  "SELECT EXTRACT(YEAR FROM tanggal) AS tahun, COUNT(*) AS jumlah_data FROM tanah WHERE YEAR(tanggal) = YEAR(CURDATE()) GROUP BY tahun",
-                  (err, dataTahun) => {
+  if (req.session.loggedin && req.session.role === "surveyor") {
+    connection.query('SELECT * FROM tanah ORDER BY id_tanah desc', function (err, dataTanah) {
+      if (err) {
+        return console.log("error: " + err.message);
+      }
+      connection.query(
+        "SELECT tanggal, COUNT(*) AS jumlah_data FROM tanah WHERE tanggal = CURDATE() GROUP BY tanggal",
+        (err, dataHari) => {
+          if (err) {
+            return console.log("error: " + err.message);
+          }
+          connection.query(
+            "SELECT EXTRACT(YEAR_MONTH FROM tanggal) AS tahun_bulan, COUNT(*) AS jumlah_data FROM tanah WHERE YEAR(tanggal) = YEAR(CURDATE()) AND MONTH(tanggal) = MONTH(CURDATE()) GROUP BY tahun_bulan",
+            (err, dataBulan) => {
+              if (err) {
+                return console.log("error: " + err.message);
+              }
+              connection.query(
+                "SELECT EXTRACT(YEAR FROM tanggal) AS tahun, COUNT(*) AS jumlah_data FROM tanah WHERE YEAR(tanggal) = YEAR(CURDATE()) GROUP BY tahun",
+                (err, dataTahun) => {
+                  if (err) {
+                    return console.log("error: " + err.message);
+                  }
+                  connection.query('SELECT nop, lb, znt, alamat_objek_pajak, nama_subjek_pajak, alamat_wajib_pajak, lt, luas_tanah_baru FROM tanah ORDER BY id_tanah DESC', function (err, dataPerubahan) {
                     if (err) {
                       return console.log("error: " + err.message);
                     }
-    res.render("surveyor/dashboard", {
-      tittle: "Dashboard",
-      tanah: dataTanah,
-      username: req.session.username,
-      hari: dataHari,
-      bulan: dataBulan,
-      tahun: dataTahun
-    });
-  });
+                    var dataBaru = dataPerubahan.filter(item => item.lt !== item.luas_tanah_baru);
+                    var jumlahDataBaru = dataBaru.length;
+                    res.render("surveyor/dashboard", {
+                      tittle: "Dashboard",
+                      tanah: dataTanah,
+                      username: req.session.username,
+                      hari: dataHari,
+                      bulan: dataBulan,
+                      tahun: dataTahun,
+                      perubahan: dataPerubahan,
+                      jumlah: jumlahDataBaru,
+                      baru: dataBaru
+                    });
+                  });
+                }
+              );
+            }
+          );
+        }
+      );
+    });      
+  } else {
+    res.redirect("/login");
+  }
 });
-});
-});
-    } else {
-        res.redirect("/login");
-    }
-  });
 
   router.get("/scanocr", (req, res) => {
     if (req.session.loggedin && req.session.role === "surveyor") {
-    var dataArray = req.session.dataArray || [];
-    var nop = '';
-    var lt = '';
-    var lb = '';
-    var znt = '';
-    var alamatObjekPajak = '';
-    var namaSubjekPajak = '';
-    var alamatWajibPajak = '';
-    var jenisTransaksi = '';
-    var status = '';
-    var pekerjaan = '';
-    var kelurahan = '';
-    var luasTanah = '';
-    var jenisTanah = '';
-    var keterangan = '';
-    var tindakan = '';
-    var pindahBlok = '';
+      var dataArray = req.session.dataArray || [];
+      var nop = '';
+      var lt = '';
+      var lb = '';
+      var znt = '';
+      var alamatObjekPajak = '';
+      var namaSubjekPajak = '';
+      var alamatWajibPajak = '';
+      var jenisTransaksi = '';
+      var status = '';
+      var pekerjaan = '';
+      var kelurahan = '';
+      var luasTanah = '';
+      var jenisTanah = '';
+      var keterangan = '';
+      var tindakan = '';
+      var pindahBlok = '';
   
-    // Mencari nilai yang diinginkan dari dataArray
-    for (let i = 0; i < dataArray.length; i++) {
-      var line = dataArray[i];
-      if (line.includes('NOP ')) {
-        console.log(line.replace('NOP', '').trim())
-        nop = line.replace('NOP ', '').trim();
-      } else if (line.includes('LT')) {
-        lt = line.replace('LT:', '').trim();
-      } else if (line.includes('LB')) {
-        lb = line.replace('LB:', '').trim();
-      } else if (line.includes('ZNT')) {
-        znt = line.replace('ZNT:', '').trim();
-      } else if (line.includes('Alamat Objek Pajak')) {
-        alamatObjekPajak = line.replace('Alamat Objek Pajak :', '').trim();
-      } else if (line.includes('Nama Subjek Pajak')) {
-        console.log(line.replace('Nama Subjek Pajak :', '').trim())
-        namaSubjekPajak = line.replace('Nama Subjek Pajak :', '').trim();
-      } else if (line.includes('Alamat Wajib Pajak')) {
-        alamatWajibPajak = line.replace('Alamat Wajib Pajak :', '').trim();
-      } else if (line.includes('Jenis Transaksi :')) {
-        jenisTransaksi = line.replace('Jenis Transaksi :', '').trim();
-      } else if (line.includes('Status :')) {
-        status = line.replace('Status :', '').trim();
-      } else if (line.includes('Pekerjaan :')) {
-        pekerjaan = line.replace('Pekerjaan :', '').trim();
-      } else if (line.includes('Keturahan')) {
-        kelurahan = line.replace('Keturahan', '').trim();
-      } else if (line.includes('Luas Tanah Baru')) {
-        luasTanah = line.replace('Luas Tanah Baru =', '').trim();
-      } else if (line.includes('Jenis Tanah :')) {
-        jenisTanah = line.replace('Jenis Tanah :', '').trim();
-      } else if (line.includes('Keterangan:')) {
-        keterangan = line.replace('(] Data Tetap () GantiNama () Pecah & Rubah LT (]Rubah LB () Hapus () Gabung () Lainnya : (] Pindah Ke Blok....', '').trim();
-      } else if (line.includes('Hapus () Gabung () Lainnya :')) {
-        tindakan = line.replace('(] Hapus () Gabung () Lainnya :', '').trim();
-      } else if (line.includes('Pindah Ke Blok')) {
-        pindahBlok = line.replace('(] Pindah Ke Blok', '').trim();
-      }
+      // Mencari nilai yang diinginkan dari dataArray
+      for (let i = 0; i < dataArray.length; i++) {
+        var line = dataArray[i];
+        if (line.includes('NOP ')) {
+          console.log(line.replace('NOP', '').trim())
+          nop = line.replace('NOP ', '').trim();
+        } else if (line.includes('LT')) {
+          lt = line.replace('LT:', '').trim();
+        } else if (line.includes('LB')) {
+          lb = line.replace('LB:', '').trim();
+        } else if (line.includes('ZNT')) {
+          znt = line.replace('ZNT:', '').trim();
+        } else if (line.includes('Alamat Objek Pajak')) {
+          alamatObjekPajak = line.replace('Alamat Objek Pajak :', '').trim();
+        } else if (line.includes('Nama Subjek Pajak')) {
+          console.log(line.replace('Nama Subjek Pajak :', '').trim())
+          namaSubjekPajak = line.replace('Nama Subjek Pajak :', '').trim();
+        } else if (line.includes('Alamat Wajib Pajak')) {
+          alamatWajibPajak = line.replace('Alamat Wajib Pajak :', '').trim();
+        } else if (line.includes('Jenis Transaksi :')) {
+          jenisTransaksi = line.replace('Jenis Transaksi :', '').trim();
+        } else if (line.includes('Status :')) {
+          status = line.replace('Status :', '').trim();
+        } else if (line.includes('Pekerjaan :')) {
+          pekerjaan = line.replace('Pekerjaan :', '').trim();
+        } else if (line.includes('Keturahan')) {
+          kelurahan = line.replace('Keturahan', '').trim();
+        } else if (line.includes('Luas Tanah Baru')) {
+          luasTanah = line.replace('Luas Tanah Baru =', '').trim();
+        } else if (line.includes('Jenis Tanah :')) {
+          jenisTanah = line.replace('Jenis Tanah :', '').trim();
+        } else if (line.includes('Keterangan:')) {
+          keterangan = line.replace('Keterangan:', '').trim();
+        } else if (line.includes('Hapus () Gabung () Lainnya :')) {
+          tindakan = line.replace('(] Hapus () Gabung () Lainnya :', '').trim();
+        } else if (line.includes('Pindah Ke Blok')) {
+          pindahBlok = line.replace('(] Pindah Ke Blok', '').trim();
+        }
   
       if (
         nop !== '' &&
@@ -185,7 +188,7 @@ router.get("/", (req, res) => {
 
   router.post("/upload", upload.single('file'), async (req, res) => {
     if (req.session.loggedin) {
-    var data = path.join(__dirname, "../uploads/" + req.file.filename);
+    var data = path.join(__dirname, "../public/uploads/" + req.file.filename);
     try {
       await worker.load();
       await worker.loadLanguage('ind');
@@ -200,8 +203,16 @@ router.get("/", (req, res) => {
       console.log(dataArray);
 
       req.session.dataArray = dataArray;
-      
+
+      let file = req.file.filename;
+
+      connection.query("INSERT INTO tanah (gambar) VALUES (?)", [file], function (error, results) {
+        if (error) throw error;
+        var idTanah = results.insertId;
+        console.log(idTanah);
+        req.session.idTanah = idTanah;
       res.redirect("/surveyor/scanocr");
+    });
     } catch (error) {
       console.error(error);
       res.status(500).send('Terjadi kesalahan saat memproses gambar: ' + error.message);
@@ -210,6 +221,84 @@ router.get("/", (req, res) => {
     res.redirect("/login");
 }
   });
+  
+
+  router.post("/save", function (req, res) {
+    if (req.session.loggedin) {
+      let nop = req.body.nop || '-';
+      let lt = req.body.lt || '-';
+      let lb = req.body.lb || '-';
+      let znt = req.body.znt || '-';
+      let alamatObjekPajak = req.body.alamatObjekPajak || '-';
+      let namaSubjekPajak = req.body.namaSubjekPajak || '-';
+      let alamatWajibPajak = req.body.alamatWajibPajak || '-';
+      let jenisTransaksi = req.body.jenisTransaksi || [];
+      let nopInduk = req.body.nopInduk || '-';
+      let nopBaru = req.body.nopBaru || '-';
+      let namaJalanObjek = req.body.namaJalanObjek || '-';
+      let blokKavNoObjek = req.body.blokKavNoObjek || '-';
+      let kelurahanObjek = req.body.kelurahanObjek || '-';
+      let rtObjek = req.body.rtObjek || '-';
+      let rwObjek = req.body.rwObjek || '-';
+      let status = req.body.status || [];
+      let pekerjaan = req.body.pekerjaan || [];
+      let namaJalanWajib = req.body.namaJalanWajib || '-';
+      let blokKavNoWajib = req.body.blokKavNoWajib || '-';
+      let kelurahanWajib = req.body.kelurahanWajib || '-';
+      let rtWajib = req.body.rtWajib || '-';
+      let rwWajib = req.body.rwWajib || '-';
+      let kabupaten = req.body.kabupaten || '-';
+      let noKtp = req.body.noKtp || '-';
+      let zntBaru = req.body.zntBaru || '-';
+      let luasTanahBaru = req.body.luasTanahBaru || '-';
+      let jenisTanah = req.body.jenisTanah || [];
+      let keterangan = req.body.keterangan || [];
+
+      var idTanah = req.session.idTanah;
+  
+      connection.query(
+        "UPDATE tanah SET nop = ?, lt = ?, lb = ?, znt = ?, alamat_objek_pajak = ?, nama_subjek_pajak = ?, alamat_wajib_pajak = ?, jenis_transaksi = ?, nop_induk = ?, nop_baru = ?, nama_jalan_objek = ?, blok_kav_no_objek = ?, kelurahan_objek = ?, rt_objek = ?, rw_objek = ?, status = ?, pekerjaan = ?, nama_jalan_wajib = ?, blok_kav_no_wajib = ?, kelurahan_wajib = ?, rt_wajib = ?, rw_wajib = ?, kabupaten = ?, no_ktp = ?, znt_baru = ?, luas_tanah_baru = ?, jenis_tanah = ?, keterangan = ? WHERE id_tanah = ?",
+        [
+          nop,
+          lt,
+          lb,
+          znt,
+          alamatObjekPajak,
+          namaSubjekPajak,
+          alamatWajibPajak,
+          jenisTransaksi.join(","),
+          nopInduk,
+          nopBaru,
+          namaJalanObjek,
+          blokKavNoObjek,
+          kelurahanObjek,
+          rtObjek,
+          rwObjek,
+          status.join(","),
+          pekerjaan.join(","),
+          namaJalanWajib,
+          blokKavNoWajib,
+          kelurahanWajib,
+          rtWajib,
+          rwWajib,
+          kabupaten,
+          noKtp,
+          zntBaru,
+          luasTanahBaru,
+          jenisTanah.join(","),
+          keterangan.join(","),
+          idTanah
+        ],
+        function (error, results) {
+          if (error) throw error;
+          res.redirect("/surveyor/datatanah");
+        }
+      );
+    } else {
+      res.redirect("/login");
+    }
+  });
+  
   
   router.get("/datatanah", (req, res) => {
     if (req.session.loggedin && req.session.role === "surveyor") {
@@ -227,81 +316,6 @@ router.get("/", (req, res) => {
     res.redirect("/login");
 }
   });
-
-  router.post("/save", function (req, res) {
-    if (req.session.loggedin) {
-      let nop = req.body.nop || '-';
-      let lt = req.body.lt || '-';
-      let lb = req.body.lb || '-';
-      let znt = req.body.znt || '-';
-      let alamatObjekPajak = req.body.alamatObjekPajak || '-';
-      let namaSubjekPajak = req.body.namaSubjekPajak || '-';
-      let alamatWajibPajak = req.body.alamatWajibPajak || '-';
-      let jenisTransaksi = Array.isArray(req.body.jenisTransaksi) ? req.body.jenisTransaksi : [req.body.jenisTransaksi] || '-';
-      let nopInduk = req.body.nopInduk || '-';
-      let nopBaru = req.body.nopBaru || '-';
-      let namaJalanObjek = req.body.namaJalanObjek || '-';
-      let blokKavNoObjek = req.body.blokKavNoObjek || '-';
-      let kelurahanObjek = req.body.kelurahanObjek || '-';
-      let rtObjek = req.body.rtObjek || '-';
-      let rwObjek = req.body.rwObjek || '-';
-      let status = Array.isArray(req.body.status) ? req.body.status : [req.body.status] || '-';
-      let pekerjaan = Array.isArray(req.body.pekerjaan) ? req.body.pekerjaan : [req.body.pekerjaan] || '-';
-      let namaJalanWajib = req.body.namaJalanWajib || '-';
-      let blokKavNoWajib = req.body.blokKavNoWajib || '-';
-      let kelurahanWajib = req.body.kelurahanWajib || '-';
-      let rtWajib = req.body.rtWajib || '-';
-      let rwWajib = req.body.rwWajib || '-';
-      let kabupaten = req.body.kabupaten || '-';
-      let noKtp = req.body.noKtp || '-';
-      let zntBaru = req.body.zntBaru || '-';
-      let luasTanahBaru = req.body.luasTanahBaru || '-';
-      let jenisTanah = Array.isArray(req.body.jenisTanah) ? req.body.jenisTanah : [req.body.jenisTanah] || '-';
-      let keterangan = Array.isArray(req.body.keterangan) ? req.body.keterangan : [req.body.keterangan] || '-';
-  
-      connection.query(
-        "INSERT INTO tanah (nop, lt, lb, znt, alamat_objek_pajak, nama_subjek_pajak, alamat_wajib_pajak, jenis_transaksi, nop_induk, nop_baru, nama_jalan_objek, blok_kav_no_objek, kelurahan_objek, rt_objek, rw_objek, status, pekerjaan, nama_jalan_wajib, blok_kav_no_wajib, kelurahan_wajib, rt_wajib, rw_wajib, kabupaten, no_ktp, znt_baru, luas_tanah_baru, jenis_tanah, keterangan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [
-          nop,
-          lt,
-          lb,
-          znt,
-          alamatObjekPajak,
-          namaSubjekPajak,
-          alamatWajibPajak,
-          JSON.stringify(jenisTransaksi),
-          nopInduk,
-          nopBaru,
-          namaJalanObjek,
-          blokKavNoObjek,
-          kelurahanObjek,
-          rtObjek,
-          rwObjek,
-          JSON.stringify(status), // Mengubah array status menjadi string sebelum disimpan ke database
-          JSON.stringify(pekerjaan),
-          namaJalanWajib,
-          blokKavNoWajib,
-          kelurahanWajib,
-          rtWajib,
-          rwWajib,
-          kabupaten,
-          noKtp,
-          zntBaru,
-          luasTanahBaru,
-          JSON.stringify(jenisTanah), // Mengubah array jenisTanah menjadi string sebelum disimpan ke database
-          JSON.stringify(keterangan),
-        ],
-        function (error, results) {
-          if (error) throw error;
-          res.redirect("/surveyor/datatanah");
-        }
-      );
-    } else {
-      res.redirect("/login");
-    }
-  });
-  
-  
   
   router.post("/updatetanah", function (req, res) {
     let tanahId = req.body.id_tanah;
@@ -385,14 +399,6 @@ router.get("/", (req, res) => {
     });
   });
   
-  router.post("/deletetanah", (req, res) => {
-    let sql = "DELETE FROM tanah WHERE id_tanah=" + req.body.id_tanah + "";
-    connection.query(sql, (err) => {
-      req.flash('error', 'Data Berhasil Dihapus!');
-      if (err) throw err;
-      res.redirect("/surveyor/datatanah");
-    });
-  });
 
   router.get("/logout", (req, res) => {
     try {

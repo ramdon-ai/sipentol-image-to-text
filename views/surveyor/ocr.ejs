@@ -146,15 +146,10 @@
                                     </div>
                                     </div>
                                     </form>
-                                    
-                                    <!-- <div>
-                                        <textarea name="" id="" cols="100" rows="15">
-                                            
-                                        </textarea>
-                                    </div> -->
                                 </div>
                                 <br>
                                 
+                                <% if (nop !== '') { %>
                                 <h1 class="h3 mb-1 text-gray-800 text-center">Hasil Scan</h1>
                                 <br>
                                 <form action="/surveyor/save" method="post">
@@ -443,7 +438,6 @@
                                                     <input type="text" class="form-control form-control-user" name="luasTanahBaru" value="<%= luasTanah %>" ><br>
                                                 </div>
                                             </div>
-                                        <!--  -->
                                             <div class="row">
                                                 <div class="col-sm-2">
                                                   <label for="jenisTanah">Jenis Tanah:</label>
@@ -550,6 +544,7 @@
                                               </div>
                                               
                                 </form>
+                                <% } %>
                             </div>
                         </div>
 

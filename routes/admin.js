@@ -49,24 +49,33 @@ router.get("/", (req, res) => {
                     if (err) {
                       return console.log("error: " + err.message);
                     }
-                    connection.query('SELECT lb, luas_tanah_baru FROM tanah ORDER BY id_tanah DESC', function (err, dataPerubahan) {
+                    connection.query('SELECT nop, lb, znt, alamat_objek_pajak, nama_subjek_pajak, alamat_wajib_pajak, lt, luas_tanah_baru FROM tanah ORDER BY id_tanah DESC', function (err, dataPerubahan) {
                       if (err) {
                         return console.log("error: " + err.message);
                       }
-    res.render("admin/dashboard", {
-      tittle: "Dashboard",
-      tanah: dataTanah,
-      username: req.session.username,
-      hari: dataHari,
-      bulan: dataBulan,
-      tahun: dataTahun,
-      perubahan: dataPerubahan
-    });
-  });
-});
-});
-});
-      });
+      
+                      var dataBaru = dataPerubahan.filter(item => item.lt !== item.luas_tanah_baru);
+                      var jumlahDataBaru = dataBaru.length;
+                      
+                      res.render("admin/dashboard", {
+                        tittle: "Dashboard",
+                        tanah: dataTanah,
+                        username: req.session.username,
+                        hari: dataHari,
+                        bulan: dataBulan,
+                        tahun: dataTahun,
+                        perubahan: dataPerubahan,
+                        jumlah: jumlahDataBaru,
+                        baru: dataBaru
+                      });
+                    });
+                  }
+                );
+              }
+            );
+          }
+        );
+      });      
 } else {
     res.redirect("/login");
 }
@@ -96,24 +105,25 @@ router.get("/", (req, res) => {
         if (err) {
           return console.log("error: " + err.message);
         }
-    res.render("admin/tanah", {
-      tittle: "Data Tanah",
-              tanah: dataTanah,
-      username: req.session.username
-    });
-  });
+                      
+                      res.render("admin/tanah", {
+                        tittle: "Data Tanah",
+                        tanah: dataTanah,
+                        username: req.session.username
+                      });
+                    });
 } else {
     res.redirect("/login");
 }
   });
 
-  router.post("/save", function (req, res) {
+  router.post("/addusers", function (req, res) {
     let username = req.body.username;
     let email = req.body.email;
     let password = req.body.password;
     let role = req.body.role;
   
-    if (username && email && password) {
+    if (username && email && password === 0) {
       bcrypt.hash(password, 10, function (err, hashedPassword) {
         if (err) throw err;
         connection.query("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?);", [username, email, hashedPassword, role], function (error, results) {

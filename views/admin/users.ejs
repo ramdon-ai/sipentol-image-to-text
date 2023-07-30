@@ -143,6 +143,11 @@
                                 <div class="alert alert-danger" role="alert"><%- messages.error %></div>
                             <% } %>
                             <div class="table-responsive">
+                                <% if (messages.error) { %>
+                                    <p><%= messages.error %></p>
+                                <% } else if (messages.success) { %>
+                                    <p><%= messages.success %></p>
+                                <% } %>
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>

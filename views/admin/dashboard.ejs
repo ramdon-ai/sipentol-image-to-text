@@ -213,7 +213,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Perubahan Data</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%= jumlah %></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -224,9 +224,9 @@
                         </div>
                     </div>
 
-                        <div class="card shadow mb-4">
+                            <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Data Tanah</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Data Perubahan</h6>
                             </div>
                             <div class="card-body">
                                 <% if (messages.success) { %>
@@ -248,71 +248,27 @@
                                                 <th>Alamat Objek Pajak</th>
                                                 <th>Nama Subjek Pajak</th>
                                                 <th>Alamat Wajib Pajak</th>
-                                                <th>Jenis Transaksi</th>
-                                                <th>Nop Induk</th>
-                                                <th>NOP Baru</th>
-                                                <th>Nama Jalan</th>
-                                                <th>Blok/Kav/No</th>
-                                                <th>Kelurahan</th>
-                                                <th>RT</th>
-                                                <th>RW</th>
-                                                <th>Status</th>
-                                                <th>Pekerjaan</th>
-                                                <th>Nama Subjek Pajak</th>
-                                                <th>Nama Jalan</th>
-                                                <th>Blok/Kav/No</th>
-                                                <th>Kelurahan</th>
-                                                <th>RT</th>
-                                                <th>RW</th>
-                                                <th>Kabupaten</th>
-                                                <th>Nomor KTP</th>
-                                                <th>ZNT</th>
                                                 <th>Luas Tanah Baru</th>
-                                                <th>Jenis Tanah</th>
-                                                <th>Keterangan</th>
-                                                <th>Tanggal Input</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% if(tanah.length){
-                                                for(var i = 0; i< tanah.length; i++) {%>
+                                            <% if(baru.length){
+                                                for(var i = 0; i< baru.length; i++) {%>
                                                     <tr>
                                                         <td><%= (i+1) %></td>
-                                                        <td><%= tanah[i].nop %></td>
-                                                        <td><%= tanah[i].lt %></td>
-                                                        <td><%= tanah[i].lb %></td>
-                                                        <td><%= tanah[i].znt %></td>
-                                                        <td><%= tanah[i].alamat_objek_pajak %></td>
-                                                        <td><%= tanah[i].nama_subjek_pajak %></td>
-                                                        <td><%= tanah[i].alamat_wajib_pajak %></td>
-                                                        <td><%= tanah[i].jenis_transaksi %></td>
-                                                        <td><%= tanah[i].nop_induk %></td>
-                                                        <td><%= tanah[i].nop_baru %></td>
-                                                        <td><%= tanah[i].nama_jalan_objek %></td>
-                                                        <td><%= tanah[i].blok_kav_no_objek %></td>
-                                                        <td><%= tanah[i].kelurahan_objek %></td>
-                                                        <td><%= tanah[i].rt_objek %></td>
-                                                        <td><%= tanah[i].rw_objek %></td>
-                                                        <td><%= tanah[i].status %></td>
-                                                        <td><%= tanah[i].pekerjaan %></td>
-                                                        <td><%= tanah[i].nama_subjek_pajak %></td>
-                                                        <td><%= tanah[i].nama_jalan_wajib %></td>
-                                                        <td><%= tanah[i].blok_kav_no_wajib %></td>
-                                                        <td><%= tanah[i].kelurahan_wajib %></td>
-                                                        <td><%= tanah[i].rt_wajib %></td>
-                                                        <td><%= tanah[i].rw_wajib %></td>
-                                                        <td><%= tanah[i].kabupaten %></td>
-                                                        <td><%= tanah[i].no_ktp %></td>
-                                                        <td><%= tanah[i].znt_baru %></td>
-                                                        <td><%= tanah[i].luas_tanah_baru %></td>
-                                                        <td><%= tanah[i].jenis_tanah_baru %></td>
-                                                        <td><%= tanah[i].keterangan %></td>
-                                                        <td><%= tanah[i].tanggal %></td>
+                                                        <td><%= baru[i].nop %></td>
+                                                        <td><%= baru[i].lt %></td>
+                                                        <td><%= baru[i].lb %></td>
+                                                        <td><%= baru[i].znt %></td>
+                                                        <td><%= baru[i].alamat_objek_pajak %></td>
+                                                        <td><%= baru[i].nama_subjek_pajak %></td>
+                                                        <td><%= baru[i].alamat_wajib_pajak %></td>
+                                                        <td><%= baru[i].luas_tanah_baru %></td>
                                                     </tr>
                                                     <% }
                                                 }else{ %>
                                                     <tr>
-                                                        <td colspan="8">
+                                                        <td colspan="9">
                                                             <div class="alert alert-danger" role="alert">
                                                                 Data Tidak Ditemukan !
                                                             </div>

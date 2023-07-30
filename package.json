@@ -23,7 +23,8 @@
     "mysql": "^2.18.1",
     "path": "^0.12.7",
     "tesseract.js": "^2.0.0",
-    "tesseract.js-core": "^4.0.4"
+    "tesseract.js-core": "^4.0.4",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
